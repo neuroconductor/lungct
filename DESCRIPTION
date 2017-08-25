@@ -3,27 +3,17 @@ Type: Package
 Title: Processing of Lung CT Scans
 Version: 0.6
 Authors@R: c(person("John", "Muschelli", role = c("aut", "cre"), email =
-    "muschellij2@gmail.com"),
-    person("Brian", "Vestal", email = "BRIAN.VESTAL@ucdenver.edu", role="aut"))
+    "muschellij2@gmail.com"),    person("Brian", "Vestal", email = "BRIAN.VESTAL@ucdenver.edu", role="aut"))
 Maintainer: John Muschelli <muschellij2@gmail.com>
 Description: Processes and registers scans of lungs of computed 
     tomography ('CT') scans.
-Imports:
-    methods,
-    stats,
-    ptinpoly,
-    ANTsRCore (>= 0.3.4),
-    extrantsr (>= 3.1),
-    oro.nifti,
-    neurobase (>= 1.20.5)
-Remotes: stnava/ANTsRCore,
-    muschellij2/extrantsr,
-    muschellij2/neurobase
+Imports:    methods,    stats,    ptinpoly,    ANTsRCore (>= 0.3.4),    extrantsr (>= 3.1),    oro.nifti,    neurobase (>= 1.20.5)
 License: GPL-2
 Encoding: UTF-8
 LazyData: true
 URL: https://github.com/muschellij2/lungct
 BugReports: https://github.com/muschellij2/lungct/issues
 RoxygenNote: 6.0.1
-
+Remotes: neuroconductor/ANTsRCore@0709eacf887d5cf7cbedcaaf67da8e7e17427b6f, neuroconductor/extrantsr@059dbd6a90f66b0b28f45f07f3007b802767d070, neuroconductor/oro.nifti@141d6f48b4101b490385054665570ec45216c669, neuroconductor/neurobase@cd72cd6a152f5b3d3188e6f405935eb1ff0cf3ec
+biocViews:
 

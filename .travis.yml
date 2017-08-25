@@ -3,8 +3,8 @@ language: r
 sudo: false
 cache: packages
 warnings_are_errors: true
-use_bioc: true
-bioc_required: true
+use_bioc: yes
+bioc_required: yes
 cran: http://cran.rstudio.com
 dist: precise
 
@@ -77,3 +77,6 @@ deploy:
 after_deploy:
   - Rscript -e 'covr::coveralls(type = "all")'
 
+
+r:
+- release
