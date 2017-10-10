@@ -17,7 +17,7 @@ RoxygenNote: 6.0.1
 biocViews:
 Suggests: 
     covr
-Remotes: neuroconductor/ANTsRCore@eac3fd2c2884a4d5a1fb9542da5fbdd52464ae01,
-    neuroconductor/oro.nifti@c25f6bcb1200506a3e39127f550bcca7766b0107,
-    neuroconductor/neurobase@c668aabafa4a51381b7cbc56ff23101abd19e337,
-    neuroconductor/extrantsr@a7aaba098c9a67aab753491868ba9d980a1139c4
+Remotes: neuroconductor/ANTsRCore@e9e894f6eb526a83f6c9cc9392b8ebcc0517ec92,
+    neuroconductor/oro.nifti@e066bff259d77de5614a3ffc1c293310ab4eb997,
+    neuroconductor/neurobase@8c9dd1990b2940e1d15965f50d7d787dca9eceaf,
+    neuroconductor/extrantsr@08c8deb4a14dac8e895addd3d0ae723281ff2da4
