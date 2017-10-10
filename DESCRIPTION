@@ -7,7 +7,7 @@ Authors@R: c(person("John", "Muschelli", role = c("aut", "cre"), email =
 Maintainer: John Muschelli <muschellij2@gmail.com>
 Description: Processes and registers scans of lungs of computed 
     tomography ('CT') scans.
-Imports:    methods,    stats,    ptinpoly,    ANTsRCore (>= 0.3.4),    extrantsr (>= 3.1),    oro.nifti,    neurobase (>= 1.20.5)
+Imports: methods,    stats,    ptinpoly,    ANTsRCore (>= 0.3.4),    extrantsr (>= 3.1),    oro.nifti,    neurobase (>= 1.20.5)
 License: GPL-2
 Encoding: UTF-8
 LazyData: true
@@ -15,5 +15,9 @@ URL: https://github.com/muschellij2/lungct
 BugReports: https://github.com/muschellij2/lungct/issues
 RoxygenNote: 6.0.1
 biocViews:
-Remotes: neuroconductor/ANTsRCore@4d3f511cde1820ec821f8a2ddb1611fcf85fec6f, neuroconductor/extrantsr@72c9a2a99df6491ecf5738594b5276765e1f4c76, neuroconductor/oro.nifti@a65aea408c7ecc4ef10a86f3138ad15ad33c9038, neuroconductor/neurobase@c481b6661cfcb493a2b0cc910bf878a89a130705
-
+Suggests: 
+    covr
+Remotes: neuroconductor/ANTsRCore@eac3fd2c2884a4d5a1fb9542da5fbdd52464ae01,
+    neuroconductor/oro.nifti@c25f6bcb1200506a3e39127f550bcca7766b0107,
+    neuroconductor/neurobase@c668aabafa4a51381b7cbc56ff23101abd19e337,
+    neuroconductor/extrantsr@a7aaba098c9a67aab753491868ba9d980a1139c4
