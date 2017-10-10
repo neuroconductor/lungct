@@ -1,102 +1,88 @@
-# Neuroconductor Template no ANTs
 language: r
 sudo: false
 cache: packages
 warnings_are_errors: true
-use_bioc: yes
-bioc_required: yes
+use_bioc: true
+bioc_required: true
 cran: http://cran.rstudio.com
 dist: precise
-
 os:
-  - linux
-  - osx
-
+- linux
+- osx
 env:
   global:
-  - R_BUILD_ARGS="--no-build-vignettes --no-manual"
+  - R_BUILD_ARGS="--no-manual"
   - R_CHECK_ARGS="--as-cran --install-args=--build"
   - RGL_USE_NULL=TRUE
-
-# r_check_args: "--as-cran --install-args=--build"
-
+  - WARNINGS_ARE_ERRORS=1
+  - PROJECT_NAME=neuroconductor
 before_install:
-  - export RGL_USE_NULL=TRUE
-  - export PROJ_DIR=`basename $PWD`    
-  - fname=travis_helpers.sh
-  - wget -O ${fname} http://bit.ly/travis_helpers
-  - cat ${fname}; source ${fname}; rm ${fname}  
-  - Rscript -e 'source("https://install-github.me/mangothecat/callr")'  
-  - cat DESCRIPTION
-  - export PACKAGE_NAME=`package_name`  
-  - remove_neuroc_packages 
-  - export ITK_GLOBAL_DEFAULT_NUMBER_OF_THREADS=1
-  # does all the clang exports
-  - x=`export_clang_cxx`; eval ${x}
-  - echo "CC=${CC}, CXX=${CXX}, CXX1X=${CXX1X}"
-  - echo "CXX1XSTD=${CXX1XSTD}, CXX11=${CXX11}"  
-  - clang_cxx  
-  - export cmake_version="3.4"
-  - cmake --version
-  - x=`cmake_setup`; echo "${x}"; eval ${x};
-  - cmake --version
-  - export ants_user=muschellij2  
-  - echo "Installing Missing Deps ITKR"
-  - install_missing_remote_deps ${ants_user}/ITKR
-  - gh_binary_install ${ants_user}/ITKR ;
-  - if [[ "${PACKAGE_NAME}" != "ITKR" ]]; 
-    then
-      echo "Installing Missing Deps ANTsRCore" ;
-      install_missing_remote_deps ${ants_user}/ANTsRCore;
-      gh_binary_install ${ants_user}/ANTsRCore ;
-    fi
-  - if [[ "${PACKAGE_NAME}" != "ANTsRCore" && "${PACKAGE_NAME}" != "ITKR" ]]; 
-    then
-      echo "Installing Missing Deps ANTsR" ;
-      install_missing_remote_deps ${ants_user}/ANTsR ;
-      gh_binary_install ${ants_user}/ANTsR ;
-    fi    
-  - cat DESCRIPTION
-  - install_remotes_no_dep
-  - cat DESCRIPTION
-  - echo $PATH ;  
-
+- export PROJ_DIR=`basename $PWD`
+- echo "travis_wait*\.log$" >> .Rbuildignore
+- fname=travis_helpers.sh
+- wget -O ${fname} http://bit.ly/travis_helpers
+- cat ${fname}; source ${fname}; rm ${fname}
+- cat DESCRIPTION
+- export PACKAGE_NAME=`package_name`
+- export RCHECK_DIR=${PACKAGE_NAME}.Rcheck
+- Rscript -e 'source("https://install-github.me/mangothecat/callr")'
+- remove_neuroc_packages
+- export ITK_GLOBAL_DEFAULT_NUMBER_OF_THREADS=1
+- x=`export_clang_cxx`; eval ${x}
+- echo "CC=${CC}, CXX=${CXX}, CXX1X=${CXX1X}"
+- echo "CXX1XSTD=${CXX1XSTD}, CXX11=${CXX11}"
+- clang_cxx
+- export cmake_version="3.4"
+- cmake --version
+- x=`cmake_setup`; echo "${x}"; eval ${x};
+- cmake --version
+- export ants_user=neuroconductor
+- echo "Installing Missing Deps ITKR"
+- install_missing_remote_deps ${ants_user}/ITKR
+- gh_binary_install ${ants_user}/ITKR ;
+- if [[ "${PACKAGE_NAME}" == "ITKR" || "${PACKAGE_NAME}" == "ANTsRCore" || "${PACKAGE_NAME}"
+  == "ANTsR" ]]; then export R_BUILD_ARGS="${R_BUILD_ARGS} --no-build-vignettes "
+  ; fi
+- if [[ "${PACKAGE_NAME}" != "ITKR" ]]; then echo "Installing Missing Deps ANTsRCore"
+  ; install_missing_remote_deps ${ants_user}/ANTsRCore; gh_binary_install ${ants_user}/ANTsRCore
+  ; fi
+- if [[ "${PACKAGE_NAME}" != "ANTsRCore" && "${PACKAGE_NAME}" != "ITKR" ]]; then echo
+  "Installing Missing Deps ANTsR" ; install_missing_remote_deps ${ants_user}/ANTsR
+  ; gh_binary_install ${ants_user}/ANTsR ; fi
+- if [[ "${PACKAGE_NAME}" == "ANTsR" ]]; then export _R_CHECK_FORCE_SUGGESTS_=0 ;
+  fi
+- cat DESCRIPTION
+- install_remotes_no_dep
+- cat DESCRIPTION
+- echo $PATH ;
+- install_deps_no_suggests
+script:
+- x=`export_clang_cxx`; eval ${x}
+- travis_wait 100 R CMD build ${R_BUILD_ARGS} .
+- rm -f travis_wait*.log
+- PKG_TARBALL=$(ls -1t *.tar.gz | head -n 1)
+- ls
+- travis_wait 100 R CMD check ${R_CHECK_ARGS} "${PKG_TARBALL}"; CHECK_RET=$? ;
+- rm -f travis_wait*.log
+- check_fail
+- check_warnings
 after_success:
-  - cat ${PACKAGE_NAME}.Rcheck/00install.out
-  - cat ${PACKAGE_NAME}.Rcheck/00check.log
-
+- cat ${PACKAGE_NAME}.Rcheck/00install.out
+- cat ${PACKAGE_NAME}.Rcheck/00check.log
 after_failure:
-  - cat ${PACKAGE_NAME}.Rcheck/00install.out
-  - cat ${PACKAGE_NAME}.Rcheck/00check.log
-
-# need this explicitly
-# for naming convention
+- cat ${PACKAGE_NAME}.Rcheck/00install.out
+- cat ${PACKAGE_NAME}.Rcheck/00check.log
 before_deploy:
-  - R CMD INSTALL --build ${PKG_TARBALL}
-  # so no overwrite of linux build
-  - if [ "$TRAVIS_OS_NAME" = "osx" ];
-    then
-      rm -f *.tar.gz ;
-    fi
-
+- if [ "$TRAVIS_OS_NAME" = "osx" ]; then rm -f *.tar.gz; fi
 deploy:
   provider: releases
   skip_cleanup: true
-  api_key:
-    secure: kBS0QGFSwPde8OyWQxus6EZm4OfvHLqm3oEIL/3s7ZptN0UaAl4OhOQ/+oPPwbG6TRApow/hm/z1uydLMGc0Eo0Pzx1cQgDHEiBpPyeiqXNqW+N2KWiVv//R+qpy6q78lC0TXWwItNxYVaFWAXivbmQb+92bLh5idNJCML7ES2mSWy7/WeRkTLpfyGB5G7QQ5kTp/Rn+LHEAWr5aeYc2kFFzLi1RFZ0t4sVwaU6zOd472zEE7e/4OD4XAJgee34SJEw6p1Ml4i0DW8mp9BlCDSQHxvGxYbx/1jUZPJpAnq36aqBE/8RVXSzITKwXMuKcNBSOk3xn68NcFV/2xbMk9LluVVzq+jC155lA41Z0Ra0U/vd+uDheNvVHfxU8ME0q8EWeSaixdBK0edI39ILw8sXJN6HfOy+6197VYLVFIalOD3Sl5k+GrvPGYeGSCvBlOWOo21/Cpu/RUlB6WNtD0zeqxDnEH4+Xsp/FzyTD1HPRkoSrsA0Xq4C4rr8TzSmaD2Y4AltdO/WPoP6IC/84mmzVocqAVGUW5CuFyyAoYML2rM+4Ww4f5hSK4QpV9aexraPEzEx93YISgvgP2UYPSKYPSNFWN5ELf1hSqH+etbvod0v2C9YX3jVgTBaptEiDZhgvSD+aWqiHkrbjl+gOjyLiMP52/ureR1LgG3nk4iU=
   file_glob: true
-  file: ${PACKAGE_NAME}*.t*gz
+  file: "${PACKAGE_NAME}*.t*gz"
   on:
     tags: true
-    repo: muschellij2/${PROJ_DIR}
-
+  api-key:
+    secure: iXGb2Nii0fTYwI+SNto4itJcqLL7roowJQHWEB00qNjKF6IC/cnE7eG1eFxGO87Kiu+HYt6wwTErDtm65Vekb1ueo3D+aXNU//9KhLdWvSH2jCpn+6bB+worVUeSsRiLMNyrkZtuCO3sj8WzCu1tjSSaBhxal8YjV3VOg5VhJDr81VhoEDd/uG85kSmL+naNFTq0utWpO2VYAiO9tzxMfDZ046UFUwUnf20MrfcFOELZzscSdJTLdMyqiMPb1lWCa2VlyejS1iHSPAQZ3/WMwFa9OxpTo/t0STSqaZMNSI4OgGElJxTCQQ4Xr6lsGhsRRs1LniKSLZiwdQlvySqTZHuazsTJ9N0Z5e0YU6cXQpnPetiE9G8YNn/25Z+dJfuVFq0H38dAJRLonZwx7SFdSh8LiEKe/ZdOU7S9Yob18Gki8qJe6rzBcERJaCZ8QLWUBzEBXLKvONkH69x8UOEJ26TTA++x9oCAu9QQHtWLK/WFsDckSojv7p4cUaXIUQz/iB5QLiCpuKrQkVPZr7csaiQkSxVMaZ5LuOc4AIAbY8GW7EeT/OYDYVTwUMekHYLTQJDTMZrBg+5tVRMpj3OSwkbtx51YfT1UsfBdrjbz/m4wV943kllF0DQd/qMtPJkp6tu04KpKXFhgoBvFbINM+Ev/NThPVrbA2Q9L8XhrX8Q=
 after_deploy:
-  - Rscript -e 'covr::coveralls(type = "all")'
-
-
-r:
-- release
-
-
-
-
+- if [[ "${PACKAGE_NAME}" != "ANTsR" && "${PACKAGE_NAME}" != "ITKR" && "${PACKAGE_NAME}"
+  != "ANTsRCore" ]]; then Rscript -e 'covr::coveralls(type = "all")' ; fi
