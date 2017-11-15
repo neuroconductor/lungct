@@ -9,6 +9,7 @@ dist: precise
 os:
 - linux
 - osx
+osx_image: xcode9
 env:
   global:
   - R_BUILD_ARGS="--no-manual"
@@ -16,6 +17,7 @@ env:
   - RGL_USE_NULL=TRUE
   - WARNINGS_ARE_ERRORS=1
   - PROJECT_NAME=neuroconductor
+  - DISPLAY=:99.0
 before_install:
 - export PROJ_DIR=`basename $PWD`
 - echo "travis_wait*\.log$" >> .Rbuildignore
@@ -23,6 +25,7 @@ before_install:
 - wget -O ${fname} http://bit.ly/travis_helpers
 - cat ${fname}; source ${fname}; rm ${fname}
 - cat DESCRIPTION
+- start_xvfb ;
 - export PACKAGE_NAME=`package_name`
 - export RCHECK_DIR=${PACKAGE_NAME}.Rcheck
 - Rscript -e 'source("https://install-github.me/mangothecat/callr")'
@@ -82,7 +85,7 @@ deploy:
   on:
     tags: true
   api-key:
-    secure: aS2KlV22bEgSkPq520j+Ndv/a57AUi38eohV5vznw62VRXxYinh/oXMjAWiWKauHQ0DDqur4/jpxPkjrlg7/h5FwWJV7p35Zl90NOV200CLBdQLVwec/eok/mQ+zb3/9IZlFTP+YTChL4Z+HDaz+krBTnxChReIMYLMOfSJHpj5Donwf7V3ZiEzsn+r1gWlliHWlP7TpBvG3kV/ZvC+bjh2hFniLYWIHlqJybey4wswsG1ZJJlf/Elim38IEokyeE4JlPfAt+3zw8R4oSkb4HCxgveC+UgJZ4/3M9IILEXywkWBcVSCPuk2FxiNPSfY/CywyAHyNsFaWwNoCUsKZfPORhgUaGZtbRHm+/1jSUXeSOX+z7P4ho4v+c9W2kSy+9ONUMdHEYUREFgZ+rFSf0KGGrMvjcVJF1qbVInTj9G0UkakfdawDL34YVGlpJvDLqKj37hEvQY6mx321uBHIJ34fEHQjasU8EggndOm8zEwK8w/iZSHyyN5XVxqPRUnLmtSNes6pm34MeL3wE0nHrxJlUJFAFFkmLXeq+hNDQArRQviZPVFtNbEmkauVBpwI1Wtq/38xXvoRXmIoZO1I1+p5gtonkxkWulBjqf0prtv29Y2D7bFLTTxGiLQRtCLZLMXABm9CQSyYhyttKllNL40Dx2ltmpVssQ7H6DqhLSA=
+    secure: Twx/XZcFbt6ZNsKUqlJButURuKH4E7i4f0Ngdqku7xdAhRpypj8mgM1Mcc/GfMEDeBEwSWscI3ZCsm5LZi2uHJSXCCZe9gqphvKvpu4/xo3BRu/PdHlYfONySp5BYSLskOZiS102WBN1A18sd2Frgqx+inDdQONnoZy0hM9OGvijUMfxlrkQuYhga8pFaZCwzC17lf4cv9YJ0HRddL5EXbJ0ZGHtRIajeW7r9hBoKnUQQv4duYoZJMZfYChglFlV+gt1C188aLAadC9/4IPGe2dDx9+s1wTl09iy/GxbryVXep80I/ulPjxiZ6gm4KoEI27mhAFyIPCeQ8Q0DLcZkWe9ugBhaHs7svzNRWBEXmXG3lIfHDyzdqcMd/HbXGIlP2spoLfmCOTCRvEv7ufedIqrSs/L0aANk9DfFewc5PA1M8kJQw0ctKe5znDPZoXDqs8s5VGsBXDH/HoivamGQBA6eDIr7QTxWsNttkivBZcCJprreC8DVfWQg+Mtee8UZ4eF+8pCct1iVa/v8MCIvrBomouNU9qAnhZ99Wx4eCl6CydBc4F6tIE0jGE6t6J7VwAS6SS/iNSaEs7xbNShhU9IcCZHLhkqIweoFQIO7vHjTOi0PDsMv2aX5qVEOtu3X36AU9Hp6Cl+wLW6nUIsiaFXrkkDAEsrFPp/jxlC7zc=
 after_deploy:
 - if [[ "${PACKAGE_NAME}" != "ANTsR" && "${PACKAGE_NAME}" != "ITKR" && "${PACKAGE_NAME}"
   != "ANTsRCore" ]]; then Rscript -e 'covr::coveralls(type = "all")' ; fi
