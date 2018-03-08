@@ -18,6 +18,6 @@ biocViews:
 Suggests: 
     covr
 Remotes: neuroconductor/ANTsRCore@c369a3eaaf2d5d54689a1e47ee173b821b7077f6,
-    neuroconductor/oro.nifti@ce05d267c1e3d4cec38c536dd4e506e1c09c2c4d,
-    neuroconductor/neurobase@95b0e364a8d2f99e97ff2f79a7efb54b821bb43a,
-    neuroconductor/extrantsr@5bdfdc2ceba40223f6e96582ce9c1a1c01699e01
+    neuroconductor/oro.nifti@b2b5e408785973e074bdf2f520720a79c23b6ffa,
+    neuroconductor/neurobase@a8c7908b98784ee2373508c5d4212659e7b90a9a,
+    neuroconductor/extrantsr@06e46ae49363fc6e7c23dff5023317980f34d072
