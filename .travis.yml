@@ -5,7 +5,7 @@ warnings_are_errors: true
 use_bioc: true
 bioc_required: true
 cran: http://cran.rstudio.com
-dist: precise
+dist: trusty
 os:
 - linux
 - osx
@@ -19,6 +19,7 @@ env:
   - PROJECT_NAME=neuroconductor
   - DISPLAY=:99.0
 before_install:
+- export LD_LIBRARY_PATH=/usr/local/clang/lib:${LD_LIBRARY_PATH}
 - export PROJ_DIR=`basename $PWD`
 - echo "travis_wait*\.log$" >> .Rbuildignore
 - fname=travis_helpers.sh
@@ -59,6 +60,7 @@ before_install:
 - cat DESCRIPTION
 - echo $PATH ;
 - install_deps_no_suggests
+- travis_run_cache
 script:
 - x=`export_clang_cxx`; eval ${x}
 - travis_wait 100 R CMD build ${R_BUILD_ARGS} .
@@ -67,14 +69,13 @@ script:
 - ls
 - travis_wait 100 R CMD check ${R_CHECK_ARGS} "${PKG_TARBALL}"; CHECK_RET=$? ;
 - rm -f travis_wait*.log
-- if [[ $CHECK_RET -ne 0 ]]; then echo "R CMD check failed"; check_fail; exit 1; fi
+- if [[ $CHECK_RET -ne 0 ]]; then echo "R CMD check failed"; check_fail; dump_logs;
+  travis_terminate 1; fi
 - check_warnings
 after_success:
-- cat ${PACKAGE_NAME}.Rcheck/00install.out
-- cat ${PACKAGE_NAME}.Rcheck/00check.log
+- dump_logs
 after_failure:
-- cat ${PACKAGE_NAME}.Rcheck/00install.out
-- cat ${PACKAGE_NAME}.Rcheck/00check.log
+- dump_logs
 before_deploy:
 - if [ "$TRAVIS_OS_NAME" = "osx" ]; then rm -f *.tar.gz; fi
 deploy:
@@ -85,7 +86,7 @@ deploy:
   on:
     tags: true
   api-key:
-    secure: k8bNwu8fDtepgDr9HF5ZkSQfUwVqLk1YemwSXVJbHmAAPqLh0ZP7XPKLlCeWfucKzjvP/h5AJx3q90kSU2qPi+QabdT9EUsUn+E0sWlzb8htTR86dQFgyGeS+U2OyLTymg9MLtNoK0Yfd1Zdk4/4KmQD2Hno6mLEVYkmRCcYmbDQzGofoa0RX7KATWa/Yna8kkT497haTbmM4bOTbIF5VCltNxPjOPTTG4tuT4knGcB85Ftz+nthuuL2Gz9hnSjgdJk4sbw9Y80xVY81t+34EvQObz1XEeZLoC3m1u7woB57RemRwRCgtlrvxV+p+e6tWb2TYkFmiwU+If9ewnd2VgkEUp2gkXLLdT/621gXDDWx6B3VsNQbirkEQeHHA6Egj2+JIIzbgRQYblti4j7CQI+ViKlGCmW7ysEb34cDy0+BdAqZgd5hdb+bcBvX1zumkl3ZqTFCSnfbXRaxbE1ardgXKB6tyqLGcgHQWKcxKY3msoMDlzAfa0YMV/XueicY/wHuH8K7RtFP+eppf/OO464s8e+A9kD36Yoq2Vzbrq30vaEEQaYeQ/q7blMqc5bAAOly0koda123G+5Qwf/XkISH5wc18lKW7wWwAs5q4hLquFH2j6biGAr8iGAM+0gAY4S5G/n1BRbbkJhriAd6jJlb2W7EEgHkAUH428IRZ/8=
+    secure: gNFL4NU8z6pHR4y5AbcLjliY3h0AcYvIGyG2rXoq15sDGdhCyxy6Ox2QfXxiFBFk6PlUQqTn1EQzioBE04MeebHHfc4Ru00nokUQQwTSHISY9gYU/u+BRmNVr9QzXSnXfNqiLuFlmRbnCqBg1qVwj8x6edfPRpNFJ/K+DCrSHOMB46uNUYxeuSIRgkqjO9DTMC2/xE9vSbbc4xfM5pehS8ueepHSyiUOvO26p1+dI6yDjgbA4t06z5PFqTVSK8LFMAZ1Ds5YyOdx1jNyIeLv0cKpzzg+7tShSuXS16A90SvPP5DC15x62rcSZkBkbILUDoFF4tRRGt/PYvcsNgSFtX+CwmWJOBmmt1HVQYtcCLlIlyrs3ZvphYa8bjYpaNbBiZ/etMwSJd8JAT1vVbVxWjkSTgCcXC3SbSzTFlRN+pL43kIN70akQbvPdu0N7V9C53NHhu+/b/rJAQzAlq0fS8Lc3oZ7LkydjTTzRDI9GgQOdzrYZcci+KXfHd1ZbD3IGncS64kSVIIdNGj0jGkPv0foMEbK1Q145iTzbNbBlTDYWAa8/cxfPm/yFwwATR5LHBsprWG3U9wadQj6q1esOgE2mziOfNxXtv7vnKGMyiIVc1Bar+W0b3/VdbEENk8h8mWDuLG10lYYMsTuo/sudHQR6GieKQ7p8DiWJMtpZu8=
 after_deploy:
 - if [[ "${PACKAGE_NAME}" != "ANTsR" && "${PACKAGE_NAME}" != "ITKR" && "${PACKAGE_NAME}"
   != "ANTsRCore" ]]; then Rscript -e 'covr::coveralls(type = "all")' ; fi
