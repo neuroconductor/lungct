@@ -20,4 +20,4 @@ Suggests:
 Remotes: neuroconductor/ANTsRCore@c369a3eaaf2d5d54689a1e47ee173b821b7077f6,
     neuroconductor/oro.nifti@b2b5e408785973e074bdf2f520720a79c23b6ffa,
     neuroconductor/neurobase@a8c7908b98784ee2373508c5d4212659e7b90a9a,
-    neuroconductor/extrantsr@06e46ae49363fc6e7c23dff5023317980f34d072
+    neuroconductor/extrantsr@0356e5fbb8a338268c4826af2bee5c0a6b06da76
