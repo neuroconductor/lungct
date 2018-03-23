@@ -19,6 +19,7 @@ env:
   - PROJECT_NAME=neuroconductor
   - DISPLAY=:99.0
 before_install:
+- ulimit -n 2048
 - export LD_LIBRARY_PATH=/usr/local/clang/lib:${LD_LIBRARY_PATH}
 - export PROJ_DIR=`basename $PWD`
 - echo "travis_wait*\.log$" >> .Rbuildignore
@@ -33,6 +34,7 @@ before_install:
 - remove_neuroc_packages
 - export ITK_GLOBAL_DEFAULT_NUMBER_OF_THREADS=1
 - x=`export_clang_cxx`; eval ${x}
+- no_open_mp ;
 - echo "CC=${CC}, CXX=${CXX}, CXX1X=${CXX1X}"
 - echo "CXX1XSTD=${CXX1XSTD}, CXX11=${CXX11}"
 - clang_cxx
@@ -86,7 +88,7 @@ deploy:
   on:
     tags: true
   api-key:
-    secure: EPLkD9GjmJLkQcxcCHgPBIgQZG3EGB9nH78mhuRcW/jKC3RfbQdY5sKc15OOdN1PS0z4QcTOr5R/mx/VS/kGRX9Sg9y5UpJXX1RA1LblLvK946TixnG/ES217+TwQiqzR3VVkY2n8mXDvS4YA8sulWBVPap1cIESERROkc2dRGID6u62v1FZuqYRV2urVXyHgWqD7WFtJexkfssGj7D1tnGl9xMDxR8ygWNvjkmxYPIkdG+NXj6QouY30ASIpxO1xDQvdEE3Go5hmPRowD0YPdh6Iyf+QWjV/3TnktFeppghSt18hJlYzbbK4kUEAw3FzHffE3ECGjbln73rYJEAhfV+x97XbMv7btgC4RodS0DX3OLhdsB3PcloPjl953pwcp5U/y0s3Or+ym/BDMPuLvsbcq/KUrlEzCn3VWPx3M2jt1yEFHO+GRn7lZcAS+Kn6U6VzrGCLNPyB40FIOSbCy768msZJpjSs/Xx4kM5osRegFZm8FcR+Utttp5J6Tb4/ey4YdC/MqcYpWM2AawWeCmrZMDUDWQCJeLcaGE3woGPUE7k1f4/pxZlFXJkU8OicW7tOvKuJW2Sk18o/ieQhzQjqJ0r9p1YBZssQQhik2b54qG0FBeuPDkvCrj1EbsyMelOm/LVHohEJdTWTFNZ9U6kQ+1T8bUZWFhLnqMZjgM=
+    secure: cE83LOaOSepxIlZMzPgqdWHwNkfj2FF9Yg7ePGqAWVL8KcXnYaWzknUZCFcAffl0AAZWnRMRskbDEEbE62a6j+0QkeNqf3G5yvhCtPi82QelkLSpUZ2p6x0+awYMMVUYXqUqi0L78jxlhMstrWe2+yJrUAGHCU+VwfMq2ZmOXIRJ/iwcLtOHDNjyWr5XYzUxy1IsTckKZt+lmJ/9F/1BIvTDY3uoMVsr00/XPrEkEounrxTzq2kymCw/tljxSZrynZybJP4qces5TPuFI0Sj/iS1IGa9gCeHlcDqL6tg9ePhGVms65TRabQgREsgEUIk4/1RteR4ZZT4b/4c3tAPCs9nVFhg9HSpbDwlLyq3ftGBGjPBKA3/47oS+R/e+8XB05OpbNyOO968n3avko4btAyLfrWVNeloYKTCWEe/9idFYT7/4Wxs8Y24m1hBnOOpNHnR7DbXT2aJQsAWVfNPN2fqW5RVwmqTZX5JS756cQluCqKfnbWh2Cz/Z3SoGTtKZhzKg/hUp893v4LjmOEl5tc4anyFds5GM/EWhbN6yRDLEyEJpT8neujHhgpMwNUxheHRPcCQS7NAaZEcHSOUUp7TtqSjI7Ex1FmuFxQwGGtawGrZeBSyUM12YP5IjanBAA15/YVvJmljybOzj+4QVzeQx4P3UtLuvQCFXQ9dHv8=
 after_deploy:
 - if [[ "${PACKAGE_NAME}" != "ANTsR" && "${PACKAGE_NAME}" != "ITKR" && "${PACKAGE_NAME}"
   != "ANTsRCore" ]]; then Rscript -e 'covr::coveralls(type = "all")' ; fi
