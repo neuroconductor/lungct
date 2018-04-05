@@ -19,5 +19,5 @@ Suggests:
     covr
 Remotes: neuroconductor/ANTsRCore@c369a3eaaf2d5d54689a1e47ee173b821b7077f6,
     neuroconductor/oro.nifti@36474ce8faeb769d00c7bab606f9bb1ca46ccba8,
-    neuroconductor/neurobase@975b860b44ecbee251f13edd88e9a64fca978462,
-    neuroconductor/extrantsr@5571470639c02aa08823415b19f11df9ef3be00e
+    neuroconductor/neurobase@776416cd033579eaa534e9925c1d8848594b2701,
+    neuroconductor/extrantsr@f812eaef969da32731e87111d5563e8bed0c5e81
