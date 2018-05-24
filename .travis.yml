@@ -10,6 +10,9 @@ os:
 - linux
 - osx
 osx_image: xcode9
+r:
+- release
+- devel
 env:
   global:
   - R_BUILD_ARGS="--no-manual"
@@ -28,6 +31,7 @@ before_install:
 - cat ${fname}; source ${fname}; rm ${fname}
 - cat DESCRIPTION
 - start_xvfb ;
+- export rver=`r_version`;
 - export PACKAGE_NAME=`package_name`
 - export RCHECK_DIR=${PACKAGE_NAME}.Rcheck
 - Rscript -e 'source("https://install-github.me/mangothecat/callr")'
@@ -73,6 +77,9 @@ script:
 - rm -f travis_wait*.log
 - if [[ $CHECK_RET -ne 0 ]]; then echo "R CMD check failed"; check_fail; dump_logs;
   travis_terminate 1; fi
+- if [ "$TRAVIS_OS_NAME" = "osx" ]; then PKG_TARBALL=$(ls -1t *.tgz | head -n 1);
+  PKG_TARBALL_WITH_R=`echo $PKG_TARBALL | sed 's/.tgz/_'"R${rver}"'.tgz/'` ; mv ${PKG_TARBALL}
+  ${PKG_TARBALL_WITH_R} ; fi
 - check_warnings
 after_success:
 - dump_logs
@@ -88,7 +95,8 @@ deploy:
   on:
     tags: true
   api-key:
-    secure: dDRtKQXw2DJSEjc1PgIKaMjMNNg9Wkmp66FjOtNkZH4Bejg3iIuwiknAXkatuoNTTzstn6yNV/bKygZz0h8xYzCKDV5Fyjt0LxuD6efMxgN3wYX+8FLzslzW6uccoJYcLfqvq2dPSpBVDB7Cjc0nPVTfUIQvY3AEhkRqUqEr92uuGnx3DHmMUwcu1f7isAdBb0DewcdcS5VuNqSvuGTiCrPQ4uZCIt9Q7zXDrhhwFbS36nKbHhfsTrNfL2M5gkBLe7oJqcxOmHje7Li3qn3z1y9olVkjbyShvvRTzNg5kqj6b+iVRcAHU8Ns+p63KzvpSqQuemP8oP2YWkw3EWa9d2A/4JAcioIz1Bz6vqvADE749SXCZlM/GfX2IVsguTBYM2UaEQMnzKfo8u+Wj7yrjoF3Hhx7sP+ctH4fDiHRxBqmKsuAwohSRPKck9XEnF8sKV4TEqul9W3doFn0llFXD9Yt/JH0DqwlDsN5keSdLZ0F6u9uJr0YsCeE2aLS2AP51c2pnTzG3baKzPFeU6cHOMjwUZp5Rg+QuSx96GTUoCPgJexvhcd74Ma+sb9RU+pjICUbzCMZANbdKzKA1rJri7Zy+vgtwPAWBSB72+krTc2E7LzbdUe3BEx6iBUifGT9F9oqSub6+ZomQhkpix0ACfmH28TdpNJXB7nfBm7ldrI=
+    secure: kVv2pDzuFGVVaiCJunvA1qaDas8tTNPQD5DFP/fWhf5xqbkpTiX6aFC/evOwlYm4nq6juzQQ7vsKahqI8FaqHcJwhi+MUfN7KbWgg8J+4IsMiSdd7biKiypP8UmDOJKPknTG/ZH+Exp9eBe0+ZOmr6HXwnQJB3VU0JER5hI3eL8bEjsKlxgvOI9KLzFqV5HbZJqSvr3SRmvzQ4K0b8zVglFZYTrWRQ0yXKct11uNRgRLZ6y2+m0VhLj+sqeWPHHmFZVFqO+mvuXidxWdPlkCsBBhFUdDeuMTY7AE3xMtgndDsYMutSe7QH9NKEm5AB5MYxxqfXNlrUWG4F9zJcf/8EoRBXI667hl0W6F0Lr2bkXfxbjaSZWpn+ywMmV60K1DQVE6Zw0g0O7+ShnfsfPrA8/kQ/AbTrMSvsCvk2+wYqz/DlETfgewoCL6vbcmgqzt/8glSSPRmJmMO9sBHv68IKQq9/sPzkU1G6HmdzSdfIZ3EL+pMbepHh4ll4MWO1Dyrlpi5OIcaYYKcqE6vRuZUk3NXvsfPaUw/q+JfBh1m1TchWOp2KSuSxnFZBgOS6tcw9s+S1YFBKiacCPpVAi0E9hUAyAqFItDrdnXnBUOUaScapcq3xgRdlKPh6RqGQcFzvh0G6xm/g45XPDU1bGyNdEy3PRmoyws64+qswOFEWo=
 after_deploy:
 - if [[ "${PACKAGE_NAME}" != "ANTsR" && "${PACKAGE_NAME}" != "ITKR" && "${PACKAGE_NAME}"
-  != "ANTsRCore" ]]; then Rscript -e 'covr::coveralls(type = "all")' ; fi
+  != "ANTsRCore" ]]; then if [[ "${TRAVIS_R_VERSION_STRING}" = "release" ]]; then
+  Rscript -e 'covr::coveralls(type = "all")' ; fi fi
