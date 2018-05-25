@@ -11,8 +11,14 @@ os:
 - osx
 osx_image: xcode9
 r:
+- 3.2
+- 3.3
+- oldrel
 - release
 - devel
+allow_failures:
+- r: devel
+- os: osx
 env:
   global:
   - R_BUILD_ARGS="--no-manual"
@@ -77,15 +83,15 @@ script:
 - rm -f travis_wait*.log
 - if [[ $CHECK_RET -ne 0 ]]; then echo "R CMD check failed"; check_fail; dump_logs;
   travis_terminate 1; fi
-- if [ "$TRAVIS_OS_NAME" = "osx" ]; then PKG_TARBALL=$(ls -1t *.tgz | head -n 1);
-  PKG_TARBALL_WITH_R=`echo $PKG_TARBALL | sed 's/.tgz/_'"R${rver}"'.tgz/'` ; mv ${PKG_TARBALL}
-  ${PKG_TARBALL_WITH_R} ; fi
 - check_warnings
 after_success:
 - dump_logs
 after_failure:
 - dump_logs
 before_deploy:
+- if [ "$TRAVIS_OS_NAME" = "osx" ]; then PKG_TARBALL=$(ls -1t *.tgz | head -n 1);
+  PKG_TARBALL_WITH_R=`echo $PKG_TARBALL | sed 's/.tgz/_'"R${rver}"'.tgz/'` ; mv ${PKG_TARBALL}
+  ${PKG_TARBALL_WITH_R} ; fi
 - if [ "$TRAVIS_OS_NAME" = "osx" ]; then rm -f *.tar.gz; fi
 deploy:
   provider: releases
@@ -95,7 +101,7 @@ deploy:
   on:
     tags: true
   api-key:
-    secure: NUI3N3xaF6joIYTbGqLy6GvU8OGHTtDaV4mvxfzfuQxABWsi66+/Q0yiv18TPVeyutdsW/UN1Vz1iVQO9benyIk7V6NdMFUESFa2/v4DPGj5NkSpIJIMhTCBRCAmAxdmTtI6GjIsg4YWBgRiF0DeVEa4ApAOv+l+RErq1aSQ15D7p0WB517wzhjnEjWQj7Z5pwi9vXW9lW9qUzeDmkmMGTYOizE1/IK4tX3rW/s7OOL7YrKgvGbXbJ/N0Y685q8G/OetLRXu8C4BgOZzWa6tNux9HqRachV+HXqZzOb/RrfI1zvZmb3GwD+QY84iOxhj8kKWL/3ULkXZ1RMAAMQNz0Y4RATCjHVAVN1RoU5h2Bf5bekg/nZs6GKljCBcR88ZxHmkGLt8hw/4rLLrNeDZDMEbw1Onq1OFfkfc7zsPeuH2EyXomEvGin5OigWHw9+zOnWhi1CulPfKa4VmkGschx157Br8yUD+ogrj3/oI6wFgLhX36H0rBLmjw0XNOUDEjbw+pJLUANt+iOePJsV0wlry3C2sYM/J+iFuQgR34XvMi1rEshgvQnojlIOBd7gc6tHxSfkMpsNwajQfigvhRqFZOxBniCLEUnH88biA+KOlpihWKh4tHQwu+rP4eM9XAhSE2V6tCEtl8sbe+eNWw4+xKRMTmACUNgrBO9D0seE=
+    secure: isoW0HC8dgkaU+Q21Z1/3TVEV+Wux1kf9AxNbozZ8MkidyHLnkqt+iBKJ3CpEBgciGtmXRFbTj2qUZPT4PxqPXgRsNUVnHUiJJIv+QPnf8P7/UZtN7D35WyXkUrayFkDJLXvNmHvW27JAtUfb9RZUkir/fJJ3ioE/qRabmpt02FvM6iL3IpdIGqPlxfiBQiCPcEbiqn9jdzRcSu63zcrQKXJDbauUFgjukUX17VWAUnAxaRv6Fxny9z905kL8d2ehO1sGc5HnGv1zPh731rWNstgeT84wrHdqPxxQSRDXHFzJY1GQtmuP5ZeG+1oI+dnWTcFPBjJhsRbzZ9uVQ8jzeWBi/XyUgabxCeprntr0zPcdCfls4HUX3EekMIs8tWzVaytE2126tyZKc1c5DTkFkLZ2mKiKW8cmJQTZ/Cg9T7yeEpVd0c3sk61jRG7mhtiUR4Pn5rPD/PnfYpQ8918f5OP3MNRZn3s7mfS8UhE6NBvz9FIahVMg1Of93Kl+cTgtM2pIPs32kHPnNklAO/GiFcjEGLMnqNjGUD30PYpqL2vpUmLjBcqN0IY4ROk0veNK0UMPYmbWvzd3Zb7i0AWFsY0p2cJcHiLQEGHjZkVsr9l0RO5SHacwGEilaZQzUXy+cbzh/Nucs6StlOyEN1+bNep9yDafexTX6iEj/hODvU=
 after_deploy:
 - if [[ "${PACKAGE_NAME}" != "ANTsR" && "${PACKAGE_NAME}" != "ITKR" && "${PACKAGE_NAME}"
   != "ANTsRCore" ]]; then if [[ "${TRAVIS_R_VERSION_STRING}" = "release" ]]; then
