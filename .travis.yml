@@ -13,7 +13,7 @@ osx_image: xcode9
 r:
 - 3.2
 - 3.3
-- oldrel
+- 3.4
 - release
 - devel
 allow_failures:
@@ -91,7 +91,7 @@ after_failure:
 before_deploy:
 - if [ "$TRAVIS_OS_NAME" = "osx" ]; then PKG_TARBALL=$(ls -1t *.tgz | head -n 1);
   PKG_TARBALL_WITH_R=`echo $PKG_TARBALL | sed 's/.tgz/_'"R${rver}"'.tgz/'` ; mv ${PKG_TARBALL}
-  ${PKG_TARBALL_WITH_R} ; fi
+  ${PKG_TARBALL_WITH_R} ; echo "Built tarball is ${PKG_TARBALL_WITH_R}" ; fi
 - if [ "$TRAVIS_OS_NAME" = "osx" ]; then rm -f *.tar.gz; fi
 deploy:
   provider: releases
@@ -101,7 +101,7 @@ deploy:
   on:
     tags: true
   api-key:
-    secure: ITgr7RnC58tu0um9san7/0tdObV6pSSpsaU1pWCXUoYJY8krclNoL6nZuAN5fs9aimPX3BUHmBvFrBYWLJFnVP7HZ5Ntwm+FjrO0FMxuSn4nuSt9ppCXDCq1t/0Jt6O2aFKfdycNdFY7j9bEeBMU9R965OUabcvaucuHS9r5LrvRNCA09W2NfdkaZOdMQndoG7I7kbRpNTT45C5fMiQ0//9Bd4223hQM6oz70pV5sT3NiiHXSZMb7t6ZT2/jUiyeLV5Oetnm6u1dQvpPUWSFgKy9c0hXZsJ398r/oErTk3yrz0ECw/n8OuxRWcg2n8jVeCSeofBEhmxGIcjGndc0apZLh+LNXtnBId5Vk894WJ2G386QcnrGKGYQjGixXR5RnRMxaFUwK7XrZLXoQGkM56FXm+9r96IxnK7Y+4E5zYyR3j2TRKRlgPTTtdvmFpd2vH5YLhXcwK0uIYibthbO/2ypvV5YHywhxALgjTZa5JSC6PlSdAQYrzRs9K1Hgt5ygY0vD7bmLQIgM8bRDkKGgBjJkGVF8eF4A5gf1LMPCoHrdHbiEujaHQ8s+Te162GXd6gmurJfhTZvFohdOOLTrBJ3VKHIxj/h4ggOJxZrMjMLEriN5pVNo5URX9JIAIrBA2QwqmTg79y7mlSwWZcplQ9IHCTFSRqtophu2oLPAfg=
+    secure: Un5b9fzTfg64R25al/BsRlANOcxH9Zm2NfUfxt3zWVq4hBnOKTSI/vFFrjUnJzWfYLVhVa93Q854Lf4rovhZnrkrRU0bMxRIw2FzRgqsq6xDBk2z2ziFvlsltK4v6k2+GJDRMXTtNL1tlpR799YT/0p62m2XtSFEbCxbk8DZzTeJbosINqooex2JEKxdlJ4Dnd4b8tGOXzPNE6KZi/UHWWKQGq+H6GoCy/DtJC7Oxo/MCbVcYIhcpv/Rvq9DDVRcCerM3SG6ozWKqZ+JM/z52NxyngbnaYPwQ3FFsXiM+aJk7LDjQwjfiOkpUBgbaa++NDtYGJ+tTHLsEOQIqXb285CGNQSP419h70jvaVy2RHaj5SFk1QhUMEDTPqC3Q212ni3+oOAJWZIYvRBYlVZ33iGBgkn0gkr6gwq9LGUPD2mvUm2Ui7Cd79fV+YTJK2CMjwuW/CRpK5V6oRjBUSDUIWvC7ni9ZcKcnScoIsDpJjuWXtYQmIR8CFp4DzUVHx7csuLzeDITKfdEI/bubKsi6u6jVhWgB3/O8meSOxDav55oDM4rh9tzcbEfAh0znejdD1CLIqhbL2LMs5w0xlzobS6bKVwTxBu2PR3sZ/lSz3MHdNajgY6OKXsbCGPqyftKoiLzKQs7GVSXKmtmVP5JelO28foKT9HA9d4DMyJPd3w=
 after_deploy:
 - if [[ "${PACKAGE_NAME}" != "ANTsR" && "${PACKAGE_NAME}" != "ITKR" && "${PACKAGE_NAME}"
   != "ANTsRCore" ]]; then if [[ "${TRAVIS_R_VERSION_STRING}" = "release" ]]; then
