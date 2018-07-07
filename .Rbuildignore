@@ -4,4 +4,4 @@
 ^DESCRIPTION\.bak$
 ^\./\.travis\.yml\.bak$
 ^appveyor\.yml$
-^\./appveyor\.yml\.bak$
+R/quick_lung_mask.R
