@@ -16,13 +16,11 @@ LazyData: true
 URL: https://github.com/muschellij2/lungct
 BugReports: https://github.com/muschellij2/lungct/issues
 RoxygenNote: 6.0.1
-Suggests: 
-    covr,
-    testthat
-Remotes:  
+Suggests: covr, testthat
+biocViews:
+Remotes: 
     neuroconductor/ANTsRCore@ef0b2d4ed9cd0b7d60f26cdef300a96bbaf141ab,
     neuroconductor/oro.nifti@3a5a16d22c58dfcd81453b5d9f1613ba6b95c165,
     neuroconductor/ANTsR@66ec07e5e903bb09b4c5b66a92db794b1a566674,
     neuroconductor/neurobase@28dc4fdb4f5d21b9f00258bc3b371b9ba8d038cb,
     neuroconductor/extrantsr@7fbfe33ea6c138a68e42dc184a15d088ad1fc5cd
-biocViews: 
