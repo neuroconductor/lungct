@@ -4,17 +4,15 @@
 \alias{register_lung_mask}
 \title{Lung Registration for Left and Right Lungs}
 \usage{
-register_lung_mask(moving_mask, fixed_mask, moving = NULL, sides = c("left",
-  "right"), outprefix = NULL, verbose = FALSE,
+register_lung_mask(moving_mask, fixed_mask, moving = NULL,
+  sides = c("left", "right"), outprefix = NULL, verbose = FALSE,
   mask_interpolator = "nearestNeighbor", interpolator = "linear",
   save_memory = TRUE, ...)
 }
 \arguments{
-\item{moving_mask}{Mask of moving image, left has values
-1 and 3 (3 if both left and right), right has values 2 and 3}
+\item{moving_mask}{Mask of moving image, left = 1, right = 2}
 
-\item{fixed_mask}{Mask of fixed image, left has values
-1 and 3 (3 if both left and right), right has values 2 and 3}
+\item{fixed_mask}{Mask of fixed image, left = 1, right = 2}
 
 \item{moving}{image of moving image, usually CT, will be masked
 by \code{moving_mask}}
