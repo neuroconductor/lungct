@@ -43,7 +43,7 @@ before_install:
 - cat ${fname}; source ${fname}; rm ${fname}
 - cat DESCRIPTION
 - start_xvfb ;
-- export rver=`r_version`;
+- export rver=`r_version`; echo $rver ;
 - export PACKAGE_NAME=`package_name`
 - export RCHECK_DIR=${PACKAGE_NAME}.Rcheck
 - remove_neuroc_packages
@@ -78,6 +78,7 @@ before_install:
 - echo $PATH ;
 - install_deps_no_suggests
 - install_python_requirements ;
+- R CMD javareconf ;
 - travis_run_cache
 script:
 - x=`export_clang_cxx`; eval ${x}
@@ -111,7 +112,7 @@ deploy:
   on:
     tags: true
   api-key:
-    secure: LSlGgJOfJr4rjlp98ZhRGAsFTE/cykN6nv9is5hAFaCKzIi0HNiWjaHR9CpA814YwVEyTZFU8n7U390OhWOCPHBKgsYDhqQNyju6D7acqVpo/yd6ebudyaMqgBG7hW4YJLsiigdO3GrIlCG/jY0YACqXpmeKDsSr8InFQjDJFC/7IiJJdoYQF0Bt1R8GmzbgTUzRusb2moct0pyJHsTIU5JCfC+Yf+bUuWHLMlnOptThEIc/e/NPH+tCVrHquMc2spnbFAHTwF2lQ0WF1jeXBaUKGs/bMUtHF4KkX6MRYQ+VgmFS1cL5ta/WfcjwGwHj4rWcxqjgVCP9ncvtzr0nsOKZA4SOcHlSK9JG/rLqpt4caHJfcdue0RrkScDne0diifcz1EUTnPNcDO4M+g1WSvB9GlTdU8HVyk57QmOucIS9sLi80O3kB1EQ92baue+PVfNVxmfHb7uX6Xli/TOVoPzEq4jzOYUN63cQ0vUTl2pudaNpz3fEbjw0gGMPkOSoQUgKfLy46V8glePnEUp5n+m0FMggJGJVwerVCpZIHSsOxIYnpJlL60CR17ELenPZOaSNfARwwtgTq+yuRUQUC1+eCwDjcEaAab+pZa/kz+I6CAxPprBeTLD/vJjchx3UD51jZuvssxrK+7AWFceCkKyt8w7bhmgn0d7Ty1fwCpk=
+    secure: zXbLAL/w4y0NlRcZtzAk4FlRZZU3LhxgeFXRJMJwhKjF94PXb1VtlVkTrwos+mY94FkZfy70tKkOHjOQLLFdJwof3WyMxBdkmxTaw9Ega06hVP/nT2ZFB2fbTs1oITywAjHfS6sQ9ly4+t9TcOQUc1I8Idv8MAV6/W7ofA/suEgIZ9mZljk8x26+05p6VLf68CnjzADnoPkQh5YQEPbJzwjVecuHC6WxjsUupsOcQXRBXfE0VGF/m5IHokTqLqhcLZtHL4rMN1IsQVlVTJIzCH8X/2JFUbeVFcTHxz7fEk0R8NPAk14WWQvKJJsbepa1il+5nA7/dZI5tN+WOhTXEQnROX9ef7eW5oLYV6owpvsEXIclKH+Q1DJFnZ+h3YDBLA8YpFnsFj+gV0vFe8w5BybUfYZK2e/e485zErkf7MmDMa4VaK8434A4sY2idKlJB2bKhs5/eQnDDxK3IZ0aLEELcayCwNtGSPfFG5M3fl/+M7GeFFeEk0w8O0av4dIsLGDdoLkJAyRJojZijk4D6IJ5uLGEY1m4gkmnDq7fZD7gB925EML/MrNnlzzXqFNYsX86R4dRKIVnZ+58JErfmE8gYq/qMnJyS9tnb4BV66HA3uVYhzjA/+H+SKKPrSG4sPzZlnGtXZWo28lt95HWkYZQ2IHU2FO2loKTgA9W9uI=
 after_deploy:
 - if [[ "${PACKAGE_NAME}" != "ANTsR" && "${PACKAGE_NAME}" != "ITKR" && "${PACKAGE_NAME}"
   != "ANTsRCore" ]]; then if [[ "${TRAVIS_R_VERSION_STRING}" = "release" ]]; then

@@ -15,12 +15,15 @@ Encoding: UTF-8
 LazyData: true
 URL: https://github.com/muschellij2/lungct
 BugReports: https://github.com/muschellij2/lungct/issues
-RoxygenNote: 6.0.1
-Suggests: covr, testthat
-biocViews:
-Remotes: 
-    neuroconductor/ANTsRCore@ca99db1943902ce7198ef8fe03d9dbe3a29da262,
-    neuroconductor/oro.nifti@abbfadf8976d2c29f518c76580d9095d3994439e,
+RoxygenNote: 6.1.0
+Repository: Neuroconductor
+Suggests: 
+    covr,
+    testthat
+Remotes:  
+    neuroconductor/ANTsRCore@4cda7da5fe1e70591b8af1b85062c4fb985fbeff,
+    neuroconductor/oro.nifti@8362fa023b073cd5d0beec0f0be33a50944fe1d7,
     neuroconductor/ANTsR@a8614b2d79996a33933aa27f9f2d9452d8df5564,
-    neuroconductor/neurobase@78af0703255f3c77da3be3dc4453cb2830ddff87,
+    neuroconductor/neurobase@6a2a6915322a37fb640b2781a637f49830fa1539,
     neuroconductor/extrantsr@c15772225ec38930c3fca5ea22b70b9556d18289
+biocViews: 
