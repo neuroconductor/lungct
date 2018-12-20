@@ -1,4 +1,5 @@
 ^\./appveyor\.yml\.bak$
+^README\.Rmd$
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^\.travis\.yml$
