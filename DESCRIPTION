@@ -2,30 +2,24 @@ Package: lungct
 Type: Package
 Title: Processing of Lung Computed Tomography ('CT') Scans
 Version: 0.7.4
-Authors@R: c(
-    person("John", "Muschelli", role = c("aut", "cre"), email =
-    "muschellij2@gmail.com",
-    comment = c(ORCID = "0000-0001-6469-1750")),
-    person("Brian", "Vestal", email = "BRIAN.VESTAL@ucdenver.edu", role="aut"),
-    person("Sarah", "Ryan", email = "SARAH.M.RYAN@ucdenver.edu", role="aut"))
-Description: Processes and registers scans of lungs of computed 
-    tomography ('CT') scans.
-Imports:
-    methods,
-    stats,
-    ptinpoly,
-    ANTsRCore (>= 0.3.4),
-    ANTsR,
-    extrantsr (>= 3.1),
-    oro.nifti,
-    neurobase (>= 1.20.5),
-    abind,
-    RIA
-Remotes: 
-    ANTsX/ANTsR,
-    ANTsX/ANTsRCore,
-    muschellij2/extrantsr,
-    muschellij2/neurobase
+Authors@R: c( person("John", "Muschelli", role = c("aut", "cre"), email
+        = "muschellij2@gmail.com", comment = c(ORCID =
+        "0000-0001-6469-1750")), person("Brian", "Vestal", email =
+        "BRIAN.VESTAL@ucdenver.edu", role="aut"), person("Sarah",
+        "Ryan", email = "SARAH.M.RYAN@ucdenver.edu", role="aut"))
+Description: Processes and registers scans of lungs of computed
+        tomography ('CT') scans.
+Imports: methods, stats, ptinpoly, ANTsRCore (>= 0.3.4), ANTsR,
+        extrantsr (>= 3.1), oro.nifti, neurobase (>= 1.20.5), abind,
+        RIA
+Remotes: ANTsX/ANTsR, ANTsX/ANTsRCore, muschellij2/extrantsr,
+        muschellij2/neurobase
+Remotes:
+        neuroconductor/ANTsRCore@2bb8ab2d74ea4c92613197f94533df540d4e5c0b,
+        neuroconductor/oro.nifti@8362fa023b073cd5d0beec0f0be33a50944fe1d7,
+        neuroconductor/ANTsR@a8614b2d79996a33933aa27f9f2d9452d8df5564,
+        neuroconductor/neurobase@ebdd17f6286e659e05a313f27e9ff2c7d748a4ca,
+        neuroconductor/extrantsr@75f5c16db846ec79a28f17cca16d3289b945ac78
 License: GPL-2
 Encoding: UTF-8
 LazyData: true
@@ -35,9 +29,3 @@ RoxygenNote: 6.1.1
 Suggests: covr, testthat
 biocViews:
 Repository: Neuroconductor
-Remotes: 
-    neuroconductor/ANTsRCore@2bb8ab2d74ea4c92613197f94533df540d4e5c0b,
-    neuroconductor/oro.nifti@8362fa023b073cd5d0beec0f0be33a50944fe1d7,
-    neuroconductor/ANTsR@a8614b2d79996a33933aa27f9f2d9452d8df5564,
-    neuroconductor/neurobase@ebdd17f6286e659e05a313f27e9ff2c7d748a4ca,
-    neuroconductor/extrantsr@75f5c16db846ec79a28f17cca16d3289b945ac78
