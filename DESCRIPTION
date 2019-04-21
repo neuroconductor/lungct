@@ -2,15 +2,30 @@ Package: lungct
 Type: Package
 Title: Processing of Lung Computed Tomography ('CT') Scans
 Version: 0.7.4
-Authors@R: c( person("John", "Muschelli", role = c("aut", "cre"), email
-        = "muschellij2@gmail.com", comment = c(ORCID =
-        "0000-0001-6469-1750")), person("Brian", "Vestal", email =
-        "BRIAN.VESTAL@ucdenver.edu", role="aut"), person("Sarah",
-        "Ryan", email = "SARAH.M.RYAN@ucdenver.edu", role="aut"))
-Description: Processes and registers scans of lungs of computed
-        tomography ('CT') scans.
-Imports: methods, stats, ptinpoly, ANTsRCore (>= 0.3.4), ANTsR,
-        extrantsr (>= 3.1), oro.nifti, neurobase (>= 1.20.5), abind
+Authors@R: c(
+    person("John", "Muschelli", role = c("aut", "cre"), email =
+    "muschellij2@gmail.com",
+    comment = c(ORCID = "0000-0001-6469-1750")),
+    person("Brian", "Vestal", email = "BRIAN.VESTAL@ucdenver.edu", role="aut"),
+    person("Sarah", "Ryan", email = "SARAH.M.RYAN@ucdenver.edu", role="aut"))
+Description: Processes and registers scans of lungs of computed 
+    tomography ('CT') scans.
+Imports:
+    methods,
+    stats,
+    ptinpoly,
+    ANTsRCore (>= 0.3.4),
+    ANTsR,
+    extrantsr (>= 3.1),
+    oro.nifti,
+    neurobase (>= 1.20.5),
+    abind,
+    RIA
+Remotes: 
+    ANTsX/ANTsR,
+    ANTsX/ANTsRCore,
+    muschellij2/extrantsr,
+    muschellij2/neurobase
 License: GPL-2
 Encoding: UTF-8
 LazyData: true

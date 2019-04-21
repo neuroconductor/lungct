@@ -2,27 +2,26 @@
 % Please edit documentation in R/radiomics_lung.R
 \name{radiomics_lung}
 \alias{radiomics_lung}
-\title{Calculate radiomic features on the whole 3D lung, left and right lungs separately}
+\title{Calculate individual radiomic features on the whole 3D lung, left and right lungs separately}
 \usage{
-radiomics_lung(img, mask, background_value = NA,
-  featuresFirst = c("mean", "sd", "skew", "kurtosis", "min", "q1",
-  "median", "q3", "max", "energy", "rms", "uniformity", "entropy"),
-  featuresSpatial = c("mi", "gc"))
+radiomics_lung(img, mask, mask_values = c(1, 2), featuresFirst = c("mean",
+  "sd", "skew", "kurtosis", "min", "q1", "median", "q3", "max", "energy", "rms",
+  "uniformity", "entropy"), featuresSpatial = c("mi", "gc", "fd"))
 }
 \arguments{
 \item{img}{CT scan in ANTs image file format}
 
 \item{mask}{Mask of CT scan in ANTs image file format}
 
-\item{background_value}{= value of background}
+\item{mask_values}{Values of mask to use for radiomic feature calculation}
 
-\item{featuresFirst}{= first level radiomic features to calculate}
+\item{featuresFirst}{First level radiomic features to calculate}
 
-\item{featuresSpatial}{= spatial radiomic features to calculate}
+\item{featuresSpatial}{Spatial radiomic features to calculate}
 }
 \value{
 Values from selected features for both left and right lungs
 }
 \description{
-Calculate radiomic features on the whole 3D lung, left and right lungs separately
+Calculate individual radiomic features on the whole 3D lung, left and right lungs separately
 }
