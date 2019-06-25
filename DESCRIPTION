@@ -2,33 +2,30 @@ Package: lungct
 Type: Package
 Title: Processing of Lung Computed Tomography ('CT') Scans
 Version: 0.7.5
-Authors@R: c(
-    person("John", "Muschelli", role = c("aut", "cre"), email =
-    "muschellij2@gmail.com",
-    comment = c(ORCID = "0000-0001-6469-1750")),
-    person("Brian", "Vestal", email = "BRIAN.VESTAL@ucdenver.edu", role="aut"),
-    person("Sarah", "Ryan", email = "SARAH.M.RYAN@ucdenver.edu", role="aut"))
-Description: Processes and registers scans of lungs of computed 
-    tomography ('CT') scans.
-Imports:
-    methods,
-    stats,
-    ptinpoly,
-    ANTsRCore (>= 0.3.4),
-    ANTsR,
-    extrantsr (>= 3.1),
-    oro.nifti,
-    neurobase (>= 1.20.5),
-    abind,
-    RIA
-Remotes: 
-    ANTsX/ANTsR,
-    ANTsX/ANTsRCore,
-    muschellij2/extrantsr,
-    muschellij2/neurobase
+Authors@R: c( person("John", "Muschelli", role = c("aut", "cre"), email
+        = "muschellij2@gmail.com", comment = c(ORCID =
+        "0000-0001-6469-1750")), person("Brian", "Vestal", email =
+        "BRIAN.VESTAL@ucdenver.edu", role="aut"), person("Sarah",
+        "Ryan", email = "SARAH.M.RYAN@ucdenver.edu", role="aut"))
+Description: Processes and registers scans of lungs of computed
+        tomography ('CT') scans.
+Imports: methods, stats, ptinpoly, ANTsRCore (>= 0.3.4), ANTsR,
+        extrantsr (>= 3.1), oro.nifti, neurobase (>= 1.20.5), abind,
+        RIA
 License: GPL-2
 Encoding: UTF-8
 LazyData: true
 URL: https://github.com/muschellij2/lungct
 BugReports: https://github.com/muschellij2/lungct/issues
 RoxygenNote: 6.1.1
+Repository: Neuroconductor
+Suggests: 
+    covr,
+    testthat
+Remotes:  
+    neuroconductor/ANTsRCore@764cc41cc0dec70e0918b39de5f5711714893ac2,
+    neuroconductor/oro.nifti@59bdaa67daeeaa3153bc2f19e2a2c0ea8c8286d0,
+    neuroconductor/ANTsR@b6e7c48b29b9bc262bc3654b3e80b6136ebcc2e7,
+    neuroconductor/neurobase@5b4b0340e73cbfe56539fe6f8ae4c6fd0dc7a2c0,
+    neuroconductor/extrantsr@dc9e31a95d9b6a8c658e8cd199d283be6e0737ae
+biocViews: 
