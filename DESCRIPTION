@@ -22,8 +22,8 @@ Suggests: covr, testthat
 biocViews:
 Repository: Neuroconductor
 Remotes: 
-    neuroconductor/ANTsRCore@f881d4d99a1a8a4884fb3577716b01ffea0b38e3,
+    neuroconductor/ANTsRCore@55d658eb9f3e265a3dd11aea0d423d876cb2794c,
     neuroconductor/oro.nifti@acbc87a93512a48ae9e627823b8a08337da59bcc,
     neuroconductor/ANTsR@a4a6e4623669ba75adad663279af434dae8b4e99,
     neuroconductor/neurobase@96abd32e868c588567869749268993766f421bfa,
-    neuroconductor/extrantsr@94b84932761c0feca52c89cc6a6323259f0e90c8
+    neuroconductor/extrantsr@d88e7fba9e3142322b01793c157502c7669d5580
