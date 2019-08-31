@@ -25,5 +25,5 @@ Remotes:
     neuroconductor/ANTsRCore@55d658eb9f3e265a3dd11aea0d423d876cb2794c,
     neuroconductor/oro.nifti@c8832b410ec2ccd86b23e23db79d8d0291fecb2a,
     neuroconductor/ANTsR@bb8aeacac74c9969fe0693cffb82291ba192fe31,
-    neuroconductor/neurobase@891b7ef6fdcf4d3025911a0a20398d2174d932f5,
-    neuroconductor/extrantsr@ea15871b70b0f9aeec03340c582b475d3b4bc1c0
+    neuroconductor/neurobase@69edde6d85b13cf182ed5990e6c4166795128977,
+    neuroconductor/extrantsr@eb3e9ab6e4a081ef9134ae2b47260817f44b2834
