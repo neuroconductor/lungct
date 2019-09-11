@@ -56,6 +56,9 @@ cache:
 
 # Adapt as necessary starting from here
 build_script:
+  - choco install ffmpeg & exit 0
+  - choco install dcmtk & exit 0
+  - choco install libreoffice-fresh & exit 0  
   - if not exist "C:\rtm" mkdir C:\rtm
   - set TMP=C:/rtm
   - set TEMP=C:/rtm
@@ -147,4 +150,4 @@ deploy:
   on:
     appveyor_repo_tag: true
 
-# neuroc.deps commit id:6302102
+# neuroc.deps commit id:efc1681
