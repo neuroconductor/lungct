@@ -24,6 +24,7 @@ Repository: Neuroconductor
 Remotes: 
     neuroconductor/ANTsRCore@3f638ceda3df0e8d35c7044f89bf8abb468c8502,
     neuroconductor/oro.nifti@c8832b410ec2ccd86b23e23db79d8d0291fecb2a,
-    neuroconductor/ANTsR@bb8aeacac74c9969fe0693cffb82291ba192fe31,
-    neuroconductor/neurobase@69edde6d85b13cf182ed5990e6c4166795128977,
-    neuroconductor/extrantsr@fc8c4d7596c255f666eae4b8da0165033caeca8a
+    neuroconductor/ANTsR@c1c38af312bbd1ccda1ae9b4ea6200aef002006b,
+    neuroconductor/neurobase@d3a2cc3be17fb34f6e0d1eb1bf61e6eee6bcf48c,
+    neuroconductor/RIA@952888ee8c15a7eadd10276424e21740667319fd,
+    neuroconductor/extrantsr@21bdb7b0ea46f07aa276c6cbba4448aa8160c263
