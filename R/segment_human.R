@@ -4,7 +4,9 @@
 #' @param img Filename or \code{antsImage}
 #' @param adder amount to be added to the image to make non-zero
 #' @param lthresh lower threshold for the image
+#' @param ... arguments passed to \code{\link{check_ants}}
 #' @param verbose Print diagnostic messages
+#' @param smooth smooth the image using Perona-Malik smoother
 #'
 #' @return List of smoothed image, body, adder
 #' @export
@@ -12,9 +14,11 @@ segment_human = function(
   img,
   adder = 1025,
   lthresh = -300,
-  verbose = TRUE
+  verbose = TRUE,
+  smooth = TRUE,
+  ...
 ) {
-  reg_img = check_ants(img)
+  reg_img = check_ants(img, ...)
   ##############################
   # 1024 should be lower limit
   ##############################
@@ -34,7 +38,11 @@ segment_human = function(
   if (verbose) {
     message("# Getting Humans: Smoothing Image")
   }
-  ss = iMath(reg_img, "PeronaMalik", 10, 5)
+  if (smooth) {
+    ss = iMath(reg_img, "PeronaMalik", 10, 5)
+  } else {
+    ss = reg_img
+  }
 
   if (verbose) {
     message("# Getting Humans: Largest Component")
