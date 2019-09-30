@@ -1,0 +1,29 @@
+Package: lungct
+Type: Package
+Title: Processing of Lung Computed Tomography ('CT') Scans
+Version: 0.7.5
+Authors@R: c( person("John", "Muschelli", role = c("aut", "cre"), email
+        = "muschellij2@gmail.com", comment = c(ORCID =
+        "0000-0001-6469-1750")), person("Brian", "Vestal", email =
+        "BRIAN.VESTAL@ucdenver.edu", role="aut"), person("Sarah",
+        "Ryan", email = "SARAH.M.RYAN@ucdenver.edu", role="aut"))
+Description: Processes and registers scans of lungs of computed
+        tomography ('CT') scans.
+Imports: methods, stats, ptinpoly, ANTsRCore (>= 0.3.4), ANTsR,
+        extrantsr (>= 3.1), oro.nifti, neurobase (>= 1.20.5), abind,
+        RIA
+License: GPL-2
+Encoding: UTF-8
+LazyData: true
+URL: https://github.com/muschellij2/lungct
+BugReports: https://github.com/muschellij2/lungct/issues
+RoxygenNote: 6.1.1
+Suggests: covr, testthat
+biocViews:
+Repository: Neuroconductor
+Remotes:
+        neuroconductor/ANTsRCore@3f638ceda3df0e8d35c7044f89bf8abb468c8502,
+        neuroconductor/oro.nifti@c8832b410ec2ccd86b23e23db79d8d0291fecb2a,
+        neuroconductor/ANTsR@bb8aeacac74c9969fe0693cffb82291ba192fe31,
+        neuroconductor/neurobase@69edde6d85b13cf182ed5990e6c4166795128977,
+        neuroconductor/extrantsr@fc8c4d7596c255f666eae4b8da0165033caeca8a
