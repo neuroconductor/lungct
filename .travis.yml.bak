@@ -39,45 +39,71 @@ env:
   - R_REMOTES_NO_ERRORS_FROM_WARNINGS=true
   - _R_CHECK_FORCE_SUGGESTS_=false
 before_install:
-  - export RGL_USE_NULL=TRUE
-  - export PROJ_DIR=`basename $PWD`
-  - fname=travis_helpers.sh
-  - wget -O ${fname} http://bit.ly/travis_helpers
-  - cat ${fname}; source ${fname}; rm ${fname}
-  - cat DESCRIPTION
-  - export PACKAGE_NAME=`package_name`
-  - remove_neuroc_packages
-  - export ITK_GLOBAL_DEFAULT_NUMBER_OF_THREADS=1
-  # does all the clang exports
-  - x=`export_clang_cxx`; eval ${x}
-  - echo "CC=${CC}, CXX=${CXX}, CXX1X=${CXX1X}"
-  - echo "CXX1XSTD=${CXX1XSTD}, CXX11=${CXX11}"
-  - clang_cxx
-  - export cmake_version="3.11"
-  - cmake --version
-  - x=`cmake_setup`; echo "${x}"; eval ${x};
-  - cmake --version
-  - export ants_user=ANTsX
-  - echo "Installing Missing Deps ITKR"
-  - install_missing_remote_deps stnava/ITKR
-  - gh_binary_install stnava/ITKR ;
-  - if [[ "${PACKAGE_NAME}" != "ITKR" ]];
-    then
-      echo "Installing Missing Deps ANTsRCore" ;
-      install_missing_remote_deps ${ants_user}/ANTsRCore;
-      gh_binary_install ${ants_user}/ANTsRCore ;
-    fi
-  - if [[ "${PACKAGE_NAME}" != "ANTsRCore" && "${PACKAGE_NAME}" != "ITKR" ]];
-    then
-      echo "Installing Missing Deps ANTsR" ;
-      install_missing_remote_deps ${ants_user}/ANTsR ;
-      gh_binary_install ${ants_user}/ANTsR ;
-    fi
-  - cat DESCRIPTION
-  - install_remotes_no_dep
-  - cat DESCRIPTION
-  - echo $PATH ;
-
+- ulimit -n 2048
+- export LD_LIBRARY_PATH=/usr/local/clang/lib:${LD_LIBRARY_PATH}
+- export PROJ_DIR=`basename $PWD`
+- echo "travis_wait*\.log$" >> .Rbuildignore
+- fname=travis_helpers.sh
+- wget -O ${fname} http://bit.ly/travis_helpers
+- cat ${fname}; source ${fname}; rm ${fname}
+- cat DESCRIPTION
+- codename=`linux_codename`;
+- if [ "${codename}" = "trusty" ]; then start_xvfb ; fi
+- jags_install || true;
+- v8_install || true;
+- dcmtk_install || true;
+- gsl_install 2.1 || true ;
+- export rver=`r_version`; echo $rver ;
+- export PACKAGE_NAME=`package_name`
+- export RCHECK_DIR=${PACKAGE_NAME}.Rcheck
+- remove_neuroc_packages
+- export ITK_GLOBAL_DEFAULT_NUMBER_OF_THREADS=1
+- x=`export_clang_cxx`; eval ${x}
+- if [ "$TRAVIS_OS_NAME" = "osx" ]; then no_open_mp ; brew install -v freetype ; fi
+- echo "CC=${CC}, CXX=${CXX}, CXX1X=${CXX1X}"
+- echo "CXX1XSTD=${CXX1XSTD}, CXX11=${CXX11}"
+- clang_cxx
+- export cmake_version="3.11"
+- cmake --version
+- x=`cmake_setup`; echo "${x}"; eval ${x};
+- cmake --version
+- export ants_user=neuroconductor
+- if [[ "${PACKAGE_NAME}" == "ITKR" || "${PACKAGE_NAME}" == "ANTsRCore" || "${PACKAGE_NAME}"
+  == "ANTsR" ]]; then Rscript -e "install.packages(c('Rcpp', 'RcppEigen'), type =
+  'source', repo = 'http://cran.rstudio.com')" ; fi
+- if [[ "${PACKAGE_NAME}" == "ITKR" || "${PACKAGE_NAME}" == "ANTsRCore" ]]; then export
+  R_BUILD_ARGS="${R_BUILD_ARGS} --no-build-vignettes " ; export R_CHECK_ARGS="--no-vignettes
+  ${R_CHECK_ARGS}" ; fi
+- if [[ "${PACKAGE_NAME}" != "ITKR" ]]; then echo "Installing Missing Deps ITKR" ;
+  install_missing_remote_deps_all ${ants_user}/ITKR ; gh_binary_install ${ants_user}/ITKR
+  ; fi
+- if [[ "${PACKAGE_NAME}" != "ANTsRCore" && "${PACKAGE_NAME}" != "ITKR" ]]; then echo
+  "Installing Missing Deps ANTsRCore" ; install_missing_remote_deps_all ${ants_user}/ANTsRCore;
+  gh_binary_install_passive ${ants_user}/ANTsRCore ; fi
+- if [[ "${PACKAGE_NAME}" != "ANTsRCore" && "${PACKAGE_NAME}" != "ITKR" && "${PACKAGE_NAME}"
+  != "ANTsR" ]]; then echo "Installing Missing Deps ANTsR" ; install_missing_remote_deps_all
+  ${ants_user}/ANTsR ; gh_binary_install_passive ${ants_user}/ANTsR ; fi
+- if [[ "${PACKAGE_NAME}" == "ANTsR" ]]; then export _R_CHECK_FORCE_SUGGESTS_=false
+  ; fi
+- cat DESCRIPTION
+- install_remotes_no_dep
+- cat DESCRIPTION
+- echo $PATH ;
+- install_deps_no_suggests
+- install_python_requirements ;
+- R CMD javareconf ;
+- travis_run_cache
+script:
+- x=`export_clang_cxx`; eval ${x}
+- travis_wait 100 R CMD build ${R_BUILD_ARGS} .
+- rm -f travis_wait*.log
+- PKG_TARBALL=$(ls -1t *.tar.gz | head -n 1)
+- ls
+- travis_wait 100 R CMD check ${R_CHECK_ARGS} "${PKG_TARBALL}"; CHECK_RET=$? ;
+- rm -f travis_wait*.log
+- if [[ $CHECK_RET -ne 0 ]]; then echo "R CMD check failed"; check_fail; dump_logs;
+  travis_terminate 1; fi
+- check_warnings
 after_success:
 - dump_logs
 after_failure:
@@ -100,7 +126,7 @@ deploy:
   on:
     tags: true
   api-key:
-    secure: vy3fb7rPKW9szey2UwiRhsbLwYeqOgwhZBehE9O4Qv8WwfXU8ftU8uDh3YiCPyXADrfiQ7Vpat5TtmNDAUZHRNT2J8zoc65ONPiLqYF5GojZiQHYyJOlZmpOE9XUccleZ/C/cA0RqBMUB2q7Gfp/DsxypptfgnK1dbUxYhCJN6+sV4awEX0Z644a/jQvD2SvpFFKirAxtpTvkKIxhTnwoynt+DbvXFUErmomXFs63Z6BpXjJTtiu6vUUulP57hA1KnaxleMw72CejOJwL+17stGQkXAogqJjVXWiTspeYsS17AY1+gr0YIyhnxhv639nFe2EflNT4QwNw+8inl4nzTNhjj1ax3JKyyDNDxUOlAMcF92KKyy/RwTqkDatUvk/RttLl3p8kFaCTUhogU3P4LRUBTUS+2wnIY57C7pEpXMeUnFfJl1r8YEF6HYE4iKhGFdZFclSOBsRk9ezRaSP8aiw9ojoKJWxxCUVPP0qWRagEJ9mt5vDdIQmbhsCO7yH7TdxUWnQ/jFcq0orpHuAzyNzq0IjkFOrB23l4kh/1TH36i7eT5FAyipbNN+0jzFdAdTjKb2fd/7z0047q2SXwGYxbSoqnFgMmNBUxhSsxCC9lM8pkKD/9VrjTEIeJgMw4jHz/NIutSp0cqAEoe9ErzSM+IihaleORKzG+kil4/s=
+    secure: mcdQM5FbhvVLSys103sJVKp6nYkwRK0BSdK6ymNmCVGCYkwhXMATlQ1rpAfJljfdtNpB+0+bolshehSAVk+F1TQtq3goazpHSXCWDjAp5pEWv9r7FnAGGEifNuONznSItVwNaNdRlynBEc2T3lF+diccq+c6jHLo342Bc/bUG9p0P4NLM1aKePSW+AoYrQ6+ZC/A1oreH/KhYnqi2ahTw85oNMfTRJx7duefoTh/BVH0A08uZCROdaO33OCR7dOj+a2NbLsXq9/Z7AD12HjFwfv8BkqAd25xcEBrX0yaUaXajhk0eukzYE/J7FMFdPdYd/ttRIPlfVKTm182wrrvwoaUx8gyuoqlxLDbGaFh5Vr9f+bFVE64QDeJU4hQoDywiENWYG2249OPYC41xNWD6V1lBCoC10lDhvusJXsBWuhbRUD0j8R823ncAQMikTHjlkH1puPq41EZxt40GN2QY1KfROzjq79KMn8RqCnHetoM5q8hwpKaz87NSsur6jSXvPUGK0jGKdsuZ31UoWA6a5cwjAgc+hDnB2JrzD9A3LfeMkYDYF/fq469whtLOMBQ/bhmbw2/DGYkYLtJYX42IE5IQVnXQ1dcTnfb4T9J4qdJ3ija+CRxpcDWgG9qF1S5bK63FXnzMB7lDGJBpiEqC0m9IlZsiaYO+FydT0Wi2no=
 after_deploy:
 - echo "${PROJECT_NAME}" | grep -q "releases"; if [[ $? -eq 0 ]]; then run_coverage="false";
   else run_coverage=; fi;
@@ -109,4 +135,4 @@ after_deploy:
   = "release" ]]; then Rscript -e 'covr::coveralls(type = "all", quiet = FALSE)' ;
   fi fi
 
-#neuroc.deps version (SHA): efc1681
+#neuroc.deps version (SHA): d7c4d8f
