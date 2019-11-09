@@ -11,22 +11,19 @@ Description: Processes and registers scans of lungs of computed
         tomography ('CT') scans.
 Imports: methods, stats, ptinpoly, ANTsRCore (>= 0.3.4), ANTsR,
         extrantsr (>= 3.1), oro.nifti, neurobase (>= 1.20.5), abind
-Suggests: 
-    RIA,
-    covr,
-    testthat
+Suggests: RIA, covr, testthat
 License: GPL-2
 Encoding: UTF-8
 LazyData: true
 URL: https://github.com/muschellij2/lungct
 BugReports: https://github.com/muschellij2/lungct/issues
 RoxygenNote: 6.1.1
+biocViews:
 Repository: Neuroconductor
-Remotes:  
-    neuroconductor/ANTsRCore@764cc41cc0dec70e0918b39de5f5711714893ac2,
-    neuroconductor/oro.nifti@59bdaa67daeeaa3153bc2f19e2a2c0ea8c8286d0,
-    neuroconductor/ANTsR@40a8dc1e2961fb5d8c43040c921c02d21548669c,
-    neuroconductor/neurobase@2190f6c685591b8ae0a1bcc7b509854baa0e277e,
-    neuroconductor/RIA@84b723851c7d6f81c87d0ac91e63ca13c511864b,
-    neuroconductor/extrantsr@dc9e31a95d9b6a8c658e8cd199d283be6e0737ae
-biocViews: 
+Remotes: 
+    neuroconductor/ANTsRCore@3f638ceda3df0e8d35c7044f89bf8abb468c8502,
+    neuroconductor/oro.nifti@a8dbb332034761e3ea64ca63d5037a95167d871d,
+    neuroconductor/ANTsR@2dc3592e5e8a375cf59d6755e4f0fa1a2931d869,
+    neuroconductor/neurobase@d94ed432744ec7177d5741cf17314882a0952b62,
+    neuroconductor/RIA@9a5deef74b70e3822bfec68ffd1cd0087c197b26,
+    neuroconductor/extrantsr@2b44808d02c902dc638c9873568d47bbc235c83d
