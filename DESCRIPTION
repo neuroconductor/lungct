@@ -1,7 +1,7 @@
 Package: lungct
 Type: Package
 Title: Processing of Lung Computed Tomography ('CT') Scans
-Version: 0.7.6
+Version: 0.7.6.1
 Authors@R: c( person("John", "Muschelli", role = c("aut", "cre"), email
         = "muschellij2@gmail.com", comment = c(ORCID =
         "0000-0001-6469-1750")), person("Brian", "Vestal", email =
@@ -11,19 +11,22 @@ Description: Processes and registers scans of lungs of computed
         tomography ('CT') scans.
 Imports: methods, stats, ptinpoly, ANTsRCore (>= 0.3.4), ANTsR,
         extrantsr (>= 3.1), oro.nifti, neurobase (>= 1.20.5), abind
-Suggests: RIA, covr, testthat
+Suggests: 
+    RIA,
+    covr,
+    testthat
 License: GPL-2
 Encoding: UTF-8
 LazyData: true
 URL: https://github.com/muschellij2/lungct
 BugReports: https://github.com/muschellij2/lungct/issues
 RoxygenNote: 6.1.1
-biocViews:
 Repository: Neuroconductor
-Remotes: 
-    neuroconductor/ANTsRCore@3f638ceda3df0e8d35c7044f89bf8abb468c8502,
-    neuroconductor/oro.nifti@b5d975f4f61bc239a99da071501d0c78d4d84ae1,
-    neuroconductor/ANTsR@c1c38af312bbd1ccda1ae9b4ea6200aef002006b,
-    neuroconductor/neurobase@3bc5945337b4ae1eb744f7aeabc6ef594d468617,
-    neuroconductor/RIA@2217431d77fec50200d0d721b45d8c4084b5e854,
-    neuroconductor/extrantsr@2b44808d02c902dc638c9873568d47bbc235c83d
+Remotes:  
+    neuroconductor/ANTsRCore@764cc41cc0dec70e0918b39de5f5711714893ac2,
+    neuroconductor/oro.nifti@59bdaa67daeeaa3153bc2f19e2a2c0ea8c8286d0,
+    neuroconductor/ANTsR@40a8dc1e2961fb5d8c43040c921c02d21548669c,
+    neuroconductor/neurobase@2190f6c685591b8ae0a1bcc7b509854baa0e277e,
+    neuroconductor/RIA@84b723851c7d6f81c87d0ac91e63ca13c511864b,
+    neuroconductor/extrantsr@dc9e31a95d9b6a8c658e8cd199d283be6e0737ae
+biocViews: 
