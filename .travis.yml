@@ -13,6 +13,9 @@ addons:
     - libfftw3-dev
     - libgsl0-dev
     - libgsl0ldbl
+    - mesa-common-dev
+    - libglu1-mesa-dev
+    - devscripts
 os:
 - linux
 - osx
@@ -47,10 +50,9 @@ before_install:
 - wget -O ${fname} http://bit.ly/travis_helpers
 - cat ${fname}; source ${fname}; rm ${fname}
 - cat DESCRIPTION
-- codename=`linux_codename`;
-- if [ "${codename}" = "trusty" ]; then start_xvfb ; fi
+- start_xvfb ;
 - jags_install || true;
-- v8_install || true;
+- if `need_v8`; then v8_install || true; fi
 - dcmtk_install || true;
 - gsl_install 2.1 || true ;
 - export rver=`r_version`; echo $rver ;
@@ -126,11 +128,12 @@ deploy:
   on:
     tags: true
   api-key:
-    secure: mnsIg0eXtVM6RHNQX1dKNk6+5j+8KoylAZQJ7lY9sXnNdPO2jyknP6EWWny4AJJXolqPHq+CfGfI5CkJhbSvdcuEoeWZnEhHI/k84ktR5xRrQ9CTyJx8moURJQeltCvGnCtWSzOkl8GyyeQRO1aAGq7+c2YT7Gxzt2MVZw+gi0JO4K+MJ5j0hi7PkoCbaIQ7tilaWe1/ll/sAHpN8JGtK9//Vd4x+oukmsgCU4wuG2Yh0/kuLEG6cQgHu3AbRFidDYjguIut2xazp0dWI1dYehuFQhjPXF93Gfx/q8MW7vQ+dKwzfIvGZ7X210TLpgm+uqxW8jiwbAXW5igd1ZyEYttSq9NPkpOkaz6SUg8JI4h2aCBvohvzU1839GmNkQHhxeJhW0lISXbOjcekF3101DcYY7mkvvOgEEih/WIZjBtBNbqkdiRfWIiJoG4gVh2R5jaXeHAQYAPRQiYNJmdEPo0ON3UgZeEeH/XmJBqQFm93/qWA6qQFAeB2Tj8Dy1Rqzs6cQAsSVtgUyu3Bddz6A3HX51mOE7cN6yePWte3uX98+GeG9lsGkzjlQiEEXJGCCLf5JnytZb8HZDGGZ0BJdm3dFaI8dZN/dlAU2TlcG9S1ByPyL33m5dJcx6wvO6DSgROuIUafd7oplc3/g+zYSISM0EwHB8GGnUv67AOQmd4=
+    secure: lMDOnFQUFS1dkS03bPuYvpnC2kkXIfYkmzf7wbaRNbnlXGFoIp+sXErPSwa4WF7FTsMKMCG1afvQi6QKgyVp6CgeKK3sJKACyKT24nPZx/g25LNX06Og2RAqXAEl0dyiP+RHXag1ylt5jCHgACxSyIFlOfCRybEHAAKXCpXo+vpujfgCT7BFHfoR7mN0lEXB6dVuHyOUCYoCh9hc2ts9rIerZrhi5dKv2fgdaqaiYUJxJmrj9cJ8xUlhRBjG6l9KE+zJi3MMaCNxIf+YtZNqR7Yq6Wp7US4bhoMhLR3JILVPT/FpteDumO5SPJKH/eP398mKK1G7VkIUN67aFd5AxThcHgPWLuT4dVoJxeulLN6uzj4L3ivN086dCJhaip56WRm1m1qvq5NZ4G9RXQjikuUZ0bY1g6g64qr3iLSmRyaDn+J2WrdzkFxKkLNrMeaDtnim8JKpG5Om7KgFady25bDVSO20um7zV56K+asv4AGx2k5L8Z7UAnn6opw7YtIH0eKC4pNhNNMH78z+bietlVzchyRRTqAb/Z6l23z++aAxQJpWVjeYIwqyAVClmi4UlJFBczVgr9mDoEiR84ZuZtieRkBYpOet5/1rZLQ3WDrQyrD0Pk9BbDzaLpBXrdGvo5MEwy+oPTP2p9QyVldqSihsvbnu5B60iOEFWdgb6lU=
 after_deploy:
 - echo "${PROJECT_NAME}" | grep -q "releases"; if [[ $? -eq 0 ]]; then run_coverage="false";
   else run_coverage=; fi;
-- if [[ "${TRAVIS_R_VERSION_STRING}" = "release" ]]; then Rscript -e 'covr::coveralls(type
-  = "all", quiet = FALSE)' ; fi
+- if [[ "${TRAVIS_R_VERSION_STRING}" = "release" ]]; then echo 'covr::coveralls(type
+  = "all", quiet = FALSE)' > neuroc_covr.R ; travis_wait 100 Rscript neuroc_covr.R
+  ; rm neuroc_covr.R ; fi
 
-#neuroc.deps version (SHA): a5aa5ca
+#neuroc.deps version (SHA): aeac922
