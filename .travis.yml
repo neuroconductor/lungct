@@ -1,6 +1,6 @@
 language: r
 warnings_are_errors: true
-cache: false
+cache: packages
 use_bioc: true
 bioc_required: true
 cran: http://cran.rstudio.com
@@ -41,6 +41,7 @@ env:
   - DISPLAY=:99.0
   - R_REMOTES_NO_ERRORS_FROM_WARNINGS=true
   - _R_CHECK_FORCE_SUGGESTS_=false
+  - CACHE_NAME="${TRAVIS_OS_NAME}-R-${TRAVIS_R_VERSION}"
 before_install:
 - ulimit -n 2048
 - export LD_LIBRARY_PATH=/usr/local/clang/lib:${LD_LIBRARY_PATH}
@@ -128,7 +129,7 @@ deploy:
   on:
     tags: true
   api-key:
-    secure: 1eZZyZ6In222KMC+HFHECBIFs59eomoq5KBADc6Ucvxi00Uh3sH/gBT0zqNZ5knXJpbpSW2aHbv0fZU7Omd8jbzBaCxJiFw4CGbEoT6pxktxC0KVoy5d9BQH4/z8H0+eSckIiRMT0Vci2pUlkAGBhMnz9u5/UuN4jJuha1wsSRNgVDtW4dQAlREbeBTVk42u3rM16GRxTtkuG5SQjk9iT1RmuRWdk4d2Pvpphq27UDjmK1I3oXVMMSR4UPk+X29j03weY86qJNMOpuHoS07NQqpc0ilKiSqqs/emBsMsuv5Yb/Lt3AEw29giyyqnE6fq8r1yxy/XglLbi0YLnjanQruQ7xP+7d8q9UUnp1tcXqolQ8Aw05zpCwPpNMZ+2YbA+y2k9WGM5CHvMuKNk/I85+4sL8O4P8bAi1HvtfBEYHH8E0JjpOeHYGSlNpfSugM+fAIJZySC/MIKiOKVy/kTzVqDw3bRRWke/rwxDTBEtA3Z6gHU34rcT8a4DVpeX6qh97XjXQ1kFpHq7fuoiUfVnkJF2Xi4wRhe6gXAGCzgxO8M2C2oQSLJoSNr0asgXU+mwBCAQRssiA2lu2VW0rP62WryeN7dwdbPIhdw4EJNXtSWuoX3/KveEf0R5ZHbWC/+KcXjza4X0yrtLGcuV1Pd2AtAnL7safQeDdKh2Oe8S8I=
+    secure: ERx6UUxe/AYvsB37FDUoCnaDkjDdy6FO30aw8tniuVIBbsVP1RHLBhYhF9zPnrAbeEKANpfR9XMbE9MIzoaAtRXKlXemQVmP7GAk68rYfkXwN8PKYs3FtLCPBZ9rjoLW+Cd3sf0f+AyBAMu55pgFqbZJSnlbpoPy1rmNYvZAe3E4hpAgy5YfLTwOu/hmmVb6ub2PV+ucWBLzcMCsd8dMKvpk9ZdUCLlo3butNLlnuFW31oEX7BarTRhuCehwwWwQiO5S0aWuNpu8WKIAr6TBTo66J9uHis5YUM0FHDMsZPKj/MpXio5a8l5K9evGk7R7xWClH1faJIYcizc4XPryMawlb5r/9Kl8M1ZVSUzyjwrfElw+3kHnDYNy2NHB4CoBd6u2l5qmOWU889RdgyAgeZX9A+qeScnHLcVm77HacWxjyIoIboQi2rSRoPs/LWz5rfY+Zd6FoUWo/oHLtEQA6l/IqI9MYgfdcQbe2dx6VTeyjKYZQ4jsBgXGvHI4rn0DN69/9+p8cxHKsTmGPM6RslcEMbztyCipc+jLk6OAHnDfZCLiYexZK9c6JTaIL0NXg2SHEVExCCvkRchORIn18AJQddMRBojEwjJh2GE4AAjkEtc/8Ncq26BIP4XkB8l3qePjIbJ/y3fTGBaYjA7tHDTVpbTcaftW62b6I/vhFMs=
 after_deploy:
 - echo "${PROJECT_NAME}" | grep -q "releases"; if [[ $? -eq 0 ]]; then run_coverage="false";
   else run_coverage=; fi;
@@ -136,4 +137,4 @@ after_deploy:
   = "all", quiet = FALSE)' > neuroc_covr.R ; travis_wait 100 Rscript neuroc_covr.R
   ; rm neuroc_covr.R ; fi
 
-#neuroc.deps version (SHA): aeac922
+#neuroc.deps version (SHA): b999a2d
