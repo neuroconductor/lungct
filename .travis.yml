@@ -12,7 +12,6 @@ addons:
     - libxml2-dev
     - libfftw3-dev
     - libgsl0-dev
-    - libgsl0ldbl
     - mesa-common-dev
     - libglu1-mesa-dev
     - devscripts
@@ -20,8 +19,7 @@ os:
 - linux
 - osx
 osx_image: xcode9.4
-services:
-- xvfb
+services: xvfb
 r:
 - 3.3
 - 3.4
@@ -43,6 +41,7 @@ env:
   - _R_CHECK_FORCE_SUGGESTS_=false
   - CACHE_NAME="${TRAVIS_OS_NAME}-R-${TRAVIS_R_VERSION}"
 before_install:
+- if [ "$TRAVIS_DIST" = "trusty" ]; then sudo apt-get -y install libgsl0ldbl ; fi
 - ulimit -n 2048
 - export LD_LIBRARY_PATH=/usr/local/clang/lib:${LD_LIBRARY_PATH}
 - export PROJ_DIR=`basename $PWD`
@@ -93,6 +92,7 @@ before_install:
 - cat DESCRIPTION
 - echo $PATH ;
 - install_deps_no_suggests
+- setup_python 3.6 false ;
 - install_python_requirements ;
 - R CMD javareconf ;
 - travis_run_cache
@@ -107,10 +107,8 @@ script:
 - if [[ $CHECK_RET -ne 0 ]]; then echo "R CMD check failed"; check_fail; dump_logs;
   travis_terminate 1; fi
 - check_warnings
-after_success:
-- dump_logs
-after_failure:
-- dump_logs
+after_success: dump_logs
+after_failure: dump_logs
 before_deploy:
 - if [ "$TRAVIS_OS_NAME" = "osx" ]; then PKG_TARBALL=$(ls -1t *.tgz | head -n 1);
   PKG_TARBALL_WITH_R=`echo $PKG_TARBALL | sed 's/.tgz/_'"R${rver}"'.tgz/'` ; mv ${PKG_TARBALL}
@@ -129,7 +127,7 @@ deploy:
   on:
     tags: true
   api-key:
-    secure: zacH2xQApHEggBb/n5F5XPDtJyVoetu8PXTtlGklK2NGnc6gaU/H7LpdQnRCdof1ur8nqex8RHbMGP7Z6+wFBiA/2Fgo4srJGD99sf5HSGdpy8X7hlSKfRexgJjgq+NMsgBAbPG8esGfxi4DQdVNt6A5zulEn0yaKOYBVSzr+cJ6hTgOrKXM/bXZhWSvEGiKmtoN4iBmWIN1AaNB9ypr961IWOnwK4Kg3+QqfUY0BJfMWlB+KaIFya1C9wMjbkn2wI7OJ9Xfq8yl2ofwTsr5zlCy6w0uuAnWEYz0rGD4J8iHEiRYFDjhSQQfP1zGsF5vGpbr3pyNRrJB46E8FJDCb+IQWjM+qsdca4Vn+rdde6DqZSniunZP2CZGZTzUeA1RLkVGYzStjYPns75pqJH538Hc6uLQlRGJJt7OYqcslCoyhPkU12IIzJXbf/+0kw8qk1R3Z6ZHpM0CaPHVQ3MaiwJPES/za2qdxPzKF8uNe67+N2RcYFtnM/8sjlCtO2hibyt9sVFrluY1+kRcrGKZs58JvcDwmjcuJNY/Szs8YiJkCI0a+o56sc9wiGjRsHC6kM/d5B2AaiKdcFN4TsttfclNlj5zW+P4WcUZTgi9JxRYvQ2OqHS+QMcMtRbx/TEyGzKCNvHP5Ny6FSplVeFLyNgISbbchmaIPABcTzHTCT8=
+    secure: AsG7BYxVFgtXIsXiyKZ00ka/Tg0ZGUzLYF3MyKsReQPuTCx/I6piJWS+RlqaUWOMeqRJKCcV8xQ1x+EVgn0yCcGv1MXJZ+F0aF03QiKlW7rJT3qeio1WE7TP5R3lTLeGEMXWdnSv1fKEpyt4KfLC/F4rwHQb8iR3a7eo47WpAfktjUsp42OGcqQpr2ykrx4BkMVonn3RneVla2GNkJvxH8Gy9DFo45J8Q7VXg6mttIA3Q4RN2W8LZ9GogUJxkSWcJ76Z24gNYo5mnTG6Npk5KhoTrMCgCTdIZyabT8+0BNVQKN8dt1sEy03rrAKOeEafbDPlupR/3hQp84bytPBAlJlwXauloXzsWxjZ5CMvmFFiFfA6RfZqAs2EkroBVdL+GCIXt+vMYmklRu/wfb+xT7KLbNmduWqimidFy3NjEzI7wLm0idj/F+3Vb4cta8MbEummaENiaSZrPKV49uqh18haBDAYzw+upAntgZ9JiCRBCpXUwcAQyPwj8nvxxLGKHwhFTZhBrDpQONeG2chOOaRmzQUAbCH3AgDh9ZkokTxdIofJg9g+leekjOXEqmx1XVYcQQLmSDv737YkZmyzafIjquVgqSZ0HorCq20otWFzcX73rukllee6GunKiQBSPX2+qglBtH5kUYA7itECs3uOFzEWVW06Pi5APOPuYjw=
 after_deploy:
 - echo "${PROJECT_NAME}" | grep -q "releases"; if [[ $? -eq 0 ]]; then run_coverage="false";
   else run_coverage=; fi;
@@ -137,4 +135,4 @@ after_deploy:
   = "all", quiet = FALSE)' > neuroc_covr.R ; travis_wait 100 Rscript neuroc_covr.R
   ; rm neuroc_covr.R ; fi
 
-#neuroc.deps version (SHA): 68c8a14
+#neuroc.deps version (SHA): cec4ca6

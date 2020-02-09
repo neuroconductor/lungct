@@ -22,7 +22,7 @@ biocViews:
 Repository: Neuroconductor
 Remotes: 
     neuroconductor/ANTsRCore@44e8a86ab89ebbc53fa982d69a8d430f68acf72b,
-    neuroconductor/oro.nifti@59bdaa67daeeaa3153bc2f19e2a2c0ea8c8286d0,
+    neuroconductor/oro.nifti@6392ccd9cbbbf5b64308cc685f0f49c4362a3d2b,
     neuroconductor/ANTsR@fc731e1ad1ed0206049165ab72703f9b22d5b572,
     neuroconductor/neurobase@430fc44d6f51a9a4941c86ae0edf6c4eaab6151d,
     neuroconductor/RIA@84b723851c7d6f81c87d0ac91e63ca13c511864b,
