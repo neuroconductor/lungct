@@ -1,6 +1,6 @@
 language: r
-warnings_are_errors: no
-cache: no
+warnings_are_errors: yes
+cache: packages
 bioc_required: yes
 cran: http://cran.rstudio.com
 dist: xenial
@@ -14,9 +14,20 @@ addons:
       - mesa-common-dev
       - libglu1-mesa-dev
       - devscripts
-os: linux
+os:
+  - linux
+  - osx
+osx_image: xcode9.4
 services: xvfb
-r: release
+r:
+  - 3.3
+  - 3.4
+  - 3.5
+  - release
+  - devel
+jobs:
+  allow_failures:
+    - r: devel
 env:
   global:
     - R_BUILD_ARGS="--no-manual"
@@ -27,6 +38,7 @@ env:
     - DISPLAY=:99.0
     - R_REMOTES_NO_ERRORS_FROM_WARNINGS=true
     - _R_CHECK_FORCE_SUGGESTS_=false
+    - CACHE_NAME="${TRAVIS_OS_NAME}-R-${TRAVIS_R_VERSION}"
 before_install:
   - if [ "$TRAVIS_DIST" = "trusty" ]; then sudo apt-get -y install libgsl0ldbl ; fi
   - ulimit -n 2048
@@ -48,6 +60,8 @@ before_install:
   - remove_neuroc_packages
   - export ITK_GLOBAL_DEFAULT_NUMBER_OF_THREADS=1
   - x=`export_clang_cxx`; eval ${x}
+  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then no_open_mp ; brew install -v freetype ;
+    fi
   - echo "CC=${CC}, CXX=${CXX}, CXX1X=${CXX1X}"
   - echo "CXX1XSTD=${CXX1XSTD}, CXX11=${CXX11}"
   - clang_cxx
@@ -78,21 +92,47 @@ before_install:
   - cat DESCRIPTION
   - echo $PATH ;
   - install_deps_no_suggests
+  - setup_python 3.6 false ;
   - install_python_requirements ;
   - R CMD javareconf ;
   - travis_run_cache
 script:
-  - Rscript -e 'install.packages("remotes")'
-  - Rscript -e 'remotes::install_github("hadley/pkgdown")'
-  - travis_wait 100 Rscript -e 'pkgdown::clean_site()'
-  - travis_wait 100 Rscript -e 'pkgdown::build_site()'
+  - x=`export_clang_cxx`; eval ${x}
+  - travis_wait 100 R CMD build ${R_BUILD_ARGS} .
+  - rm -f travis_wait*.log
+  - PKG_TARBALL=$(ls -1t *.tar.gz | head -n 1)
+  - ls
+  - travis_wait 100 R CMD check ${R_CHECK_ARGS} "${PKG_TARBALL}"; CHECK_RET=$? ;
+  - rm -f travis_wait*.log
+  - if [[ $CHECK_RET -ne 0 ]]; then echo "R CMD check failed"; check_fail; dump_logs;
+    travis_terminate 1; fi
+  - check_warnings
+after_success: dump_logs
+after_failure: dump_logs
+before_deploy:
+  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then PKG_TARBALL=$(ls -1t *.tgz | head -n 1);
+    PKG_TARBALL_WITH_R=`echo $PKG_TARBALL | sed 's/.tgz/_'"R${rver}"'.tgz/'` ; mv
+    ${PKG_TARBALL} ${PKG_TARBALL_WITH_R} ; echo "Built tarball is ${PKG_TARBALL_WITH_R}"
+    ; fi
+  - if [ "$TRAVIS_OS_NAME" = "linux" ]; then PKG_TARBALL=$(ls -1t *.tar.gz | head
+    -n 1); PKG_TARBALL_WITH_R=`echo $PKG_TARBALL | sed 's/.tar.gz/_'"R${rver}"'.tar.gz/'`
+    ; mv ${PKG_TARBALL} ${PKG_TARBALL_WITH_R} ; echo "Built tarball is ${PKG_TARBALL_WITH_R}"
+    ; fi
+  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then rm -f *.tar.gz; fi
 deploy:
-  provider: pages
+  provider: releases
   skip_cleanup: yes
-  keep_history: yes
-  local_dir: docs
-  'on':
-    branch: master
   token: $GITHUB_TOKEN
+  file_glob: yes
+  overwrite: yes
+  file: ${PACKAGE_NAME}*.t*gz
+  'on':
+    tags: yes
+after_deploy:
+  - echo "${PROJECT_NAME}" | grep -q "releases"; if [[ $? -eq 0 ]]; then run_coverage="false";
+    else run_coverage=; fi;
+  - if [[ "${TRAVIS_R_VERSION_STRING}" = "release" ]]; then echo 'covr::coveralls(type
+    = "all", quiet = FALSE)' > neuroc_covr.R ; travis_wait 100 Rscript neuroc_covr.R
+    ; rm neuroc_covr.R ; fi
 
 # neuroc.deps commit id:d4f3864
