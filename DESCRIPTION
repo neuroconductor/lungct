@@ -11,19 +11,22 @@ Description: Processes and registers scans of lungs of computed
         tomography ('CT') scans.
 Imports: methods, stats, ptinpoly, ANTsRCore (>= 0.3.4), ANTsR,
         extrantsr (>= 3.1), oro.nifti, neurobase (>= 1.20.5), abind
-Suggests: RIA, covr, testthat
+Suggests: 
+    RIA,
+    covr,
+    testthat
 License: GPL-2
 Encoding: UTF-8
 LazyData: true
 URL: https://github.com/muschellij2/lungct
 BugReports: https://github.com/muschellij2/lungct/issues
-RoxygenNote: 6.1.1
-biocViews:
+RoxygenNote: 7.0.1
 Repository: Neuroconductor
-Remotes: 
+Remotes:  
     neuroconductor/ANTsRCore@44e8a86ab89ebbc53fa982d69a8d430f68acf72b,
     neuroconductor/oro.nifti@6392ccd9cbbbf5b64308cc685f0f49c4362a3d2b,
     neuroconductor/ANTsR@fc731e1ad1ed0206049165ab72703f9b22d5b572,
     neuroconductor/RIA@84b723851c7d6f81c87d0ac91e63ca13c511864b,
     neuroconductor/neurobase@c75e4b7ef218e612ea080f6a2a12d35a2da631ed,
     neuroconductor/extrantsr@b8a361f6019a6435194afff249cc2c7cb48db055
+biocViews: 
