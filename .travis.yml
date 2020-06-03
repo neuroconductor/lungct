@@ -14,15 +14,18 @@ addons:
       - mesa-common-dev
       - libglu1-mesa-dev
       - devscripts
+      - libomp-dev
+      - libhdf5-serial-dev
+      - libhdf5-dev
 os:
   - linux
   - osx
 osx_image: xcode9.4
 services: xvfb
 r:
-  - 3.3
   - 3.4
   - 3.5
+  - 3.6
   - release
   - devel
 jobs:
@@ -87,6 +90,7 @@ before_install:
     ${ants_user}/ANTsR ; gh_binary_install_passive ${ants_user}/ANTsR ; fi
   - if [[ "${PACKAGE_NAME}" == "ANTsR" ]]; then export _R_CHECK_FORCE_SUGGESTS_=false
     ; fi
+  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then hdf5_install ; fi
   - cat DESCRIPTION
   - install_remotes_no_dep
   - cat DESCRIPTION
@@ -135,4 +139,4 @@ after_deploy:
     = "all", quiet = FALSE)' > neuroc_covr.R ; travis_wait 100 Rscript neuroc_covr.R
     ; rm neuroc_covr.R ; fi
 
-# neuroc.deps commit id:d4f3864
+# neuroc.deps commit id:05ab4c3
