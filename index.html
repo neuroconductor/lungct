@@ -88,42 +88,52 @@
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>You can install lungct from github with:</p>
-<div class="sourceCode" id="cb1"><pre class="r"><span class="co"># install.packages("devtools")</span>
-<span class="kw pkg">devtools</span><span class="kw ns">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span>(<span class="st">"muschellij2/lungct"</span>)</pre></div>
+<div class="sourceCode" id="cb1"><pre class="downlit">
+<span class="co"># install.packages("devtools")</span>
+<span class="kw">devtools</span>::<span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span>(<span class="st">"muschellij2/lungct"</span>)
+</pre></div>
 </div>
 <div id="segmentation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#segmentation" class="anchor"></a>Segmentation</h2>
 <p>To segment the lungs from the CT scan:</p>
-<div class="sourceCode" id="cb2"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">lungct</span>)
-<span class="no">filename</span> <span class="kw">&lt;-</span> <span class="st">"example.nii.gz"</span>
-<span class="no">mask</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lungct/man/segment_lung.html">segment_lung</a></span>(<span class="no">filename</span>)</pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="https://github.com/muschellij2/lungct">lungct</a></span>)
+<span class="kw">filename</span> <span class="op">&lt;-</span> <span class="st">"example.nii.gz"</span>
+<span class="kw">mask</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/segment_lung.html">segment_lung</a></span>(<span class="kw">filename</span>)
+</pre></div>
 <p>To segment the left and right lungs from the CT scan:</p>
-<div class="sourceCode" id="cb3"><pre class="r"><span class="no">img</span> <span class="kw">&lt;-</span> <span class="kw pkg">ANTsRCore</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/ANTsRCore/man/antsImageRead.html">antsImageRead</a></span>(<span class="no">filename</span>)
-<span class="no">mask2</span> <span class="kw">&lt;-</span> <span class="fu">segment_lung2</span>(<span class="no">img</span>)</pre></div>
+<div class="sourceCode" id="cb3"><pre class="downlit">
+<span class="kw">img</span> <span class="op">&lt;-</span> <span class="kw">ANTsRCore</span>::<span class="fu"><a href="https://rdrr.io/pkg/ANTsRCore/man/antsImageRead.html">antsImageRead</a></span>(<span class="kw">filename</span>)
+<span class="kw">mask2</span> <span class="op">&lt;-</span> <span class="fu">segment_lung2</span>(<span class="kw">img</span>)
+</pre></div>
 </div>
 <div id="standard-lung" class="section level2">
 <h2 class="hasAnchor">
 <a href="#standard-lung" class="anchor"></a>Standard Lung</h2>
 <p>The standard lung was created from N=62 healthy controls from <a href="http://www.copdgene.org/">COPDGene</a> (50% female, 95% white, mean age = 62 years, mean BMI = 28.5)</p>
 <p>To load the standard lung:</p>
-<div class="sourceCode" id="cb4"><pre class="r"><span class="co"># Read in standard lung template</span>
-<span class="no">filepath</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(
-    <span class="st">"extdata"</span>, <span class="st">"lung_template_mask.nii.gz"</span>,
-    <span class="kw">package</span> <span class="kw">=</span> <span class="st">"lungct"</span>)
-<span class="no">template</span> <span class="kw">&lt;-</span> <span class="kw pkg">ANTsRCore</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/ANTsRCore/man/antsImageRead.html">antsImageRead</a></span>(<span class="no">filepath</span>)</pre></div>
+<div class="sourceCode" id="cb4"><pre class="downlit">
+<span class="co"># Read in standard lung template</span>
+<span class="kw">filepath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(
+    <span class="st">"extdata"</span>, <span class="st">"lung_template_mask.nii.gz"</span>, 
+    package = <span class="st">"lungct"</span>)
+<span class="kw">template</span> <span class="op">&lt;-</span> <span class="kw">ANTsRCore</span>::<span class="fu"><a href="https://rdrr.io/pkg/ANTsRCore/man/antsImageRead.html">antsImageRead</a></span>(<span class="kw">filepath</span>)
+</pre></div>
 </div>
 <div id="registration" class="section level2">
 <h2 class="hasAnchor">
 <a href="#registration" class="anchor"></a>Registration</h2>
 <p>To register the mask to the standard lung:</p>
-<div class="sourceCode" id="cb5"><pre class="r"><span class="co"># Register mask to standard lung</span>
-<span class="no">reg</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lungct/man/register_lung_mask.html">register_lung_mask</a></span>(
-    <span class="kw">moving_mask</span> <span class="kw">=</span> <span class="no">mask</span>,
-    <span class="kw">fixed_mask</span> <span class="kw">=</span> <span class="no">template</span>,
-    <span class="kw">moving</span> <span class="kw">=</span> <span class="no">img</span>,
-    <span class="kw">sides</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"right"</span>,<span class="st">"left"</span>),
-    <span class="kw">typeofTransform</span> <span class="kw">=</span> <span class="st">"SyN"</span>)</pre></div>
+<div class="sourceCode" id="cb5"><pre class="downlit">
+<span class="co"># Register mask to standard lung</span>
+<span class="kw">reg</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/register_lung_mask.html">register_lung_mask</a></span>(
+    moving_mask = <span class="kw">mask</span>, 
+    fixed_mask = <span class="kw">template</span>, 
+    moving = <span class="kw">img</span>, 
+    sides = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"right"</span>,<span class="st">"left"</span>),
+    typeofTransform = <span class="st">"SyN"</span>)
+</pre></div>
 <p>We recommend the following for lung registration:</p>
 <ul>
 <li><p>Separately register the right and left lungs to account for differences in lung shape and size</p></li>
@@ -136,13 +146,15 @@
 <a href="#template-creation" class="anchor"></a>Template Creation</h2>
 <p>For template creation, we follow the iterative method from <a href="https://www.ncbi.nlm.nih.gov/pubmed/19818860">Avants</a>, using iterations of register_lung_mask, get_template, and calculate_DSC from lungct. However, we define convergence as having a Dice similarity coefficient (DSC) between successive iterations of at least 0.99. We recommend using parallelization for the registration step.</p>
 <p><img src="inst/extdata/templatecreation.png" alt="Template Creation"></p>
-<div class="sourceCode" id="cb6"><pre class="r"><span class="co"># Obtain new template</span>
-<span class="no">template_new</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lungct/man/get_template.html">get_template</a></span>(
-    <span class="kw">folder_warp</span> <span class="kw">=</span> <span class="no">warped_masks</span>,
-    <span class="kw">folder_comp</span> <span class="kw">=</span> <span class="no">transformations</span>)
+<div class="sourceCode" id="cb6"><pre class="downlit">
+<span class="co"># Obtain new template</span>
+<span class="kw">template_new</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_template.html">get_template</a></span>(
+    folder_warp = <span class="kw">warped_masks</span>, 
+    folder_comp = <span class="kw">transformations</span>)
 
 <span class="co"># Check convergence     </span>
-<span class="no">dice</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lungct/man/calculate_DSC.html">calculate_DSC</a></span>(<span class="no">template_init</span>, <span class="no">template_new</span>)</pre></div>
+<span class="kw">dice</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/calculate_DSC.html">calculate_DSC</a></span>(<span class="kw">template_init</span>, <span class="kw">template_new</span>)
+</pre></div>
 </div>
 <div id="radiomics" class="section level2">
 <h2 class="hasAnchor">
@@ -154,19 +166,21 @@
 <li><p>radiomics_lung: Calculation on 3D right and left lungs</p></li>
 <li><p>RIA_lung: Calculation of advanced radiomic features, such as GLCM and GLRLM <a href="https://github.com/cran/RIA">More info</a></p></li>
 </ul>
-<div class="sourceCode" id="cb7"><pre class="r"><span class="co"># Calculate radiomics</span>
-<span class="no">rad</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lungct/man/RIA_lung.html">RIA_lung</a></span>(
-    <span class="no">img</span>, <span class="no">mask</span>,
-    <span class="kw">sides</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"right"</span>, <span class="st">"left"</span>),
-    <span class="kw">features</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"fo"</span>, <span class="st">"glcm"</span>),
-    <span class="kw">bins_in</span> <span class="kw">=</span> <span class="fl">16</span>, <span class="kw">equal_prob</span> <span class="kw">=</span> <span class="fl">FALSE</span>, <span class="kw">distance</span> <span class="kw">=</span> <span class="fl">1</span>,
-    <span class="kw">statistic</span> <span class="kw">=</span> <span class="st">"mean(X, na.rm = TRUE)"</span>)</pre></div>
+<div class="sourceCode" id="cb7"><pre class="downlit">
+<span class="co"># Calculate radiomics</span>
+<span class="kw">rad</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/RIA_lung.html">RIA_lung</a></span>(
+    <span class="kw">img</span>, <span class="kw">mask</span>, 
+    sides = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"right"</span>, <span class="st">"left"</span>), 
+    features = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"fo"</span>, <span class="st">"glcm"</span>), 
+    bins_in = <span class="fl">16</span>, equal_prob = <span class="fl">FALSE</span>, distance = <span class="fl">1</span>, 
+    statistic = <span class="st">"mean(X, na.rm = TRUE)"</span>)
+</pre></div>
 </div>
 <div id="copdgene-data-usage" class="section level2">
 <h2 class="hasAnchor">
 <a href="#copdgene-data-usage" class="anchor"></a>COPDGene data usage</h2>
 <p>For the lung CT template, the <a href="http://www.copdgene.org/">COPDGene data</a> was used:</p>
-<p>âThis research used data generated by the COPDGene study, which was supported by NIH grants U01HL089856 and U01HL089897. The COPDGene project is also supported by the COPD Foundation through contributions made by an Industry Advisory Board comprised of Pfizer, AstraZeneca, Boehringer Ingelheim, Novartis, and Sunovion.â</p>
+<p>“This research used data generated by the COPDGene study, which was supported by NIH grants U01HL089856 and U01HL089897. The COPDGene project is also supported by the COPD Foundation through contributions made by an Industry Advisory Board comprised of Pfizer, AstraZeneca, Boehringer Ingelheim, Novartis, and Sunovion.”</p>
 </div>
 </div>
   </div>
@@ -211,7 +225,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
 </div>
 
       </footer>
