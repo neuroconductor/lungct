@@ -3,7 +3,7 @@ warnings_are_errors: yes
 cache: packages
 bioc_required: yes
 cran: http://cran.rstudio.com
-dist: trusty
+dist: xenial
 addons:
   apt:
     packages:
@@ -14,15 +14,18 @@ addons:
       - mesa-common-dev
       - libglu1-mesa-dev
       - devscripts
+      - libomp-dev
+      - libhdf5-serial-dev
+      - libhdf5-dev
 os:
   - linux
   - osx
 osx_image: xcode9.4
 services: xvfb
 r:
-  - 3.3
   - 3.4
   - 3.5
+  - 3.6
   - release
   - devel
 jobs:
@@ -87,6 +90,7 @@ before_install:
     ${ants_user}/ANTsR ; gh_binary_install_passive ${ants_user}/ANTsR ; fi
   - if [[ "${PACKAGE_NAME}" == "ANTsR" ]]; then export _R_CHECK_FORCE_SUGGESTS_=false
     ; fi
+  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then hdf5_install ; fi
   - cat DESCRIPTION
   - install_remotes_no_dep
   - cat DESCRIPTION
@@ -122,6 +126,7 @@ before_deploy:
 deploy:
   provider: releases
   skip_cleanup: yes
+  token: $GITHUB_TOKEN
   file_glob: yes
   overwrite: yes
   file: ${PACKAGE_NAME}*.t*gz
@@ -134,6 +139,4 @@ after_deploy:
     = "all", quiet = FALSE)' > neuroc_covr.R ; travis_wait 100 Rscript neuroc_covr.R
     ; rm neuroc_covr.R ; fi
 
-# neuroc.deps commit id:645e5e0
-
-#neuroc.deps version (SHA): 645e5e0
+# neuroc.deps commit id:05ab4c3
